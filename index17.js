@@ -25,12 +25,13 @@ app.post('/about', urlencoderParser, function (req, res) {
 
 
 app.get('/news/:id', function (req, res) {
-    var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]}
+    var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
+    console.log(req.query);
     res.render('news', {newsID: req.params.id, obj: obj})
 });
 
 app.listen(3000);
-console.log('index 16.js');
+console.log('index 17.js');
 console.log('server started, listen port 3000');
 
 
