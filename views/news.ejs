@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News</title>
+</head>
+<body>
+<h1>News ID =<%=newsID %> </h1>
+<ul>
+    <% obj.paragraphs.forEach(function (item) { %>
+        <li><%= item %></li>
+
+   <% }); %>
+</ul>
+</body>
+</html>
