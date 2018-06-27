@@ -1,4 +1,3 @@
-
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
@@ -7,48 +6,40 @@ var con = mysql.createConnection({
     password: "1111",
     database: "fuel"
 });
-// function resolveAfter2Seconds(x) {
-//     return new Promise(resolve => {
-//         setTimeout(() => {
-//             resolve(x);
-//         }, 2000);
-//     });
-// }
-
-// isSysyUserExists('suser1Login').then(z => console.log(z));
-
-function setUserID(x) {
-   var userExist = x;
-   console.log('x: ' + x);
-    
-}
-isSysyUserExists('suser1Login');
-
-function isSysyUserExists( systemUserLogin) {
-
-    con.connect(function (err) {
-                    if (err) throw err;
-                    console.log("Connected!");
-                    // let systUserExist = -2;
-                    
-                    let isSysyUserExistsReq = "select 1 from sysUsers where sUserLogin='" + systemUserLogin + "'";
-
-                    // console.log(isSysyUserExistsReq);
 
 
-                    con.query( isSysyUserExistsReq, function (err, result) {
-                                                            if (err) throw err;
-                                                            // console.log(result);
-                                                            // console.log(result.length);
+con.connect((err) => {
+    if (err) {
+        throw err;
+    }
+    console.log();
+    console.log('MySQL Connected...');
+});
 
-                                                            if (result.length === 0){ setUserID(0); }
-                                                            if (result.length > 0)  { setUserID(1)}
-                                                        }
-                            );
+exports.getUser = function (callback, suserLogin, userPassword) {
+    // console.log('getData function');
 
-                }
-             );
+    let sqlreq = "SELECT * FROM sysUsers WHERE upper(sUserLogin) = upper('"+suserLogin+"')" +
+        " AND sUserPasswordHash ='"+userPassword+"'";
+    con.query(sqlreq, (err, result) => {
+        // console.log('request string');
+        // console.log(sqlreq);
+        if (err) throw err;
+        // console.log('result form DM');
+        // console.log(result);
+        callback(returnData(result));
+    });
+};
+
+function returnData(data){
+    // console.log('returnData function');
+    // console.log(data);
+    return data;
 }
 
-// console.log('z: '+ z);
-// console.log('systUserExist: '+ systUserExist);
+
+exports.newone = function () { console.log('new one'); };
+
+// getData(function (res) {
+//     console.log();// EXPORT
+// }, 'suser1login' );
