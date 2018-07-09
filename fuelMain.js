@@ -37,10 +37,43 @@ app.post('/login', urlencoderParser, function (req, result) {
 
     if (req.body.email && !req.body.sysUserCheck)  {
         dbFunctions.getClientLogin(function (res) {
+            let orderID = [] ;
+            let orderorderQuontity =[];
+            let orderFuelType = [];
+            let orderPatrolStationType = [];
+            let orderDate = [];
+
                 // console.log(res);        // do not remove
                 if (res.length !== 0) {
                     console.log('for user '+ req.body.email+ ' access ALLOWED');
-                    result.render('clientCabinet' , {data: req.body});
+
+                    dbFunctions.getClientOrders(function (ress) {
+                            for (let h = 0; h < ress.length; h++) {
+                                // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
+                                orderID[h] = ress[h].orderID ;
+                                orderorderQuontity[h] =ress[h].orderQuontity ;
+                                orderFuelType[h] = ress[h].orderFuelType;
+                                orderPatrolStationType[h] = ress[h].orderPatrolStationType;
+                                orderDate[h] = ress[h].orderDate;
+
+                            }
+                            let obj = {
+                                data: req.body,
+                                ordersID: orderID,
+                                orderorderQuontity: orderorderQuontity,
+                                orderFuelType: orderFuelType,
+                                orderPatrolStationType: orderPatrolStationType,
+                                orderDate: orderDate
+                            };
+                            // console.log(obj.orders);
+                            result.render('clientCabinet' , obj)
+                            // console.log(orderList);
+                        }
+                        , req.body.email);
+
+                    ;
+                    
+
                 }
                 else {
                     result.send('Login or password are wrong');
@@ -49,6 +82,8 @@ app.post('/login', urlencoderParser, function (req, result) {
             }
             , req.body.email
             , req.body.pass );
+
+
     }
 });
 
@@ -64,7 +99,7 @@ app.post('/newOrderFromClient', urlencoderParser, function (req, result) {
     console.log('new order');
     console.log(req.body);
     // result.send('order accepted')
-    if (req.body.orderQuantity && (req.body.psWOG || req.body.psWOG ) ) {
+    if (req.body.orderQuantity && (req.body.psWOG || req.body.psOKKO ) ) {
         dbFunctions.makeNerOrder(function (res) {
                 console.log(res);
             }
@@ -73,10 +108,38 @@ app.post('/newOrderFromClient', urlencoderParser, function (req, result) {
             , ft
             , psType
         );
-        result.render('clientCabinet', {data: req.body});
+        let orderID = [] ;
+        let orderorderQuontity =[];
+        let orderFuelType = [];
+        let orderPatrolStationType = [];
+        let orderDate = [];
+        dbFunctions.getClientOrders(function (ress) {
+                for (let h = 0; h < ress.length; h++) {
+                    // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
+                    orderID[h] = ress[h].orderID ;
+                    orderorderQuontity[h] =ress[h].orderQuontity ;
+                    orderFuelType[h] = ress[h].orderFuelType;
+                    orderPatrolStationType[h] = ress[h].orderPatrolStationType;
+                    orderDate[h] = ress[h].orderDate;
+
+                }
+                let obj = {
+                    data: req.body,
+                    ordersID: orderID,
+                    orderorderQuontity: orderorderQuontity,
+                    orderFuelType: orderFuelType,
+                    orderPatrolStationType: orderPatrolStationType,
+                    orderDate: orderDate
+                };
+                // console.log(obj.orders);
+                result.render('clientCabinet' , obj)
+                // console.log(orderList);
+            }
+            , req.body.email);
     }
 
 });
+
 
 // function fuelTypeSelector(ft){
 //    let fft = '';

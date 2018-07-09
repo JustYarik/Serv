@@ -68,7 +68,7 @@ exports.makeNerOrder = function (callback, clientEmail ,orderQuantity, orderFuel
     "    , " + orderFuelType.toString() + "                         \n"+
     "    , " + orderPStype.toString() + "                           \n"+
     ";";
-    console.log(sqlreq);
+    // console.log(sqlreq);
     
     con.query(sqlreq, (err, result) => {
         // console.log('request string');
@@ -77,6 +77,34 @@ exports.makeNerOrder = function (callback, clientEmail ,orderQuantity, orderFuel
         // console.log('result form DM');
         // console.log(result);
         // callback(returnData(result));
+    });
+};
+
+exports.getClientOrders = function (callback, clientEmail ) {
+    let sqlreq =
+ "   SELECT                                                 \n"+
+ "         o.orderID                                        \n"+
+ "       , o.orderQuontity                                  \n"+
+ "       , o.orderFuelType                                  \n"+
+ "       , o.orderPatrolStationType                         \n"+
+ "       , o.orderDate                                      \n"+
+ "   FROM orders AS o                                       \n"+
+ "   WHERE orderClientID = (                                \n"+
+ "       SELECT                                             \n"+
+ "   clientID                                               \n"+
+ "   FROM clients                                           \n"+
+ "   WHERE upper(clientLogin) = upper('"+ clientEmail +"')  \n"+
+ ")                                                         \n" +
+ "ORDER BY orderID DESC;";
+    // console.log(sqlreq);
+
+    con.query(sqlreq, (err, result) => {
+        // console.log('request string');
+        // console.log(sqlreq);
+        if (err) throw err;
+        // console.log('result form DM');
+        // console.log(result);
+        callback(returnData(result));
     });
 };
 // exports.newone = function () { console.log('new one'); };
