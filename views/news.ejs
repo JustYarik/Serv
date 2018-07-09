@@ -5,12 +5,10 @@
     <title>News</title>
 </head>
 <body>
-<h1>News ID =<%=newsID %> </h1>
-<ul>
-    <% obj.paragraphs.forEach(function (item) { %>
-        <li><%= item %></li>
+<h1>News ID =<%= newsID %> </h1>
+    <% include bloks/header.ejs %>
 
-   <% }); %>
-</ul>
+
+
 </body>
 </html>
