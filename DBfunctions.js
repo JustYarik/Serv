@@ -42,7 +42,7 @@ exports.getClientLogin = function (callback, clientLogin, clientPassword) {
     // console.log('getData function');
 
     let sqlreq = "SELECT * FROM clients WHERE upper(clientLogin) = upper('" + clientLogin + "')" +
-        " AND clientPassword ='" + clientPassword + "'";
+        " AND clientPasswordHash ='" + clientPassword + "'";
     con.query(sqlreq, (err, result) => {
         // console.log('request string');
         // console.log(sqlreq);

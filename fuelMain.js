@@ -87,7 +87,7 @@ app.post('/login', urlencoderParser, function (req, result) {
     }
 });
 
-app.post('/newOrderFromClient', urlencoderParser, function (req, result) {
+app.post('/login/newOrderFromClient', urlencoderParser, function (req, result) {
     if (!req.body) return result.sendStatus(400);
     let ft ='';
     if (req.body.f95){ft = '95'};
@@ -157,11 +157,11 @@ app.post('/newOrderFromClient', urlencoderParser, function (req, result) {
 // });
 
 
-// app.get('/news/:id', function (req, res) {
-//     var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
-//     console.log(req.query);
-//     res.render('news', {newsID: req.params.id, obj: obj})
-// });
+app.get('/news', function (req, res) {
+    var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
+    console.log('id:' + req.params.id, 'dd: '+req.params.dd);
+    res.render('news', {newsID: req.params.id, obj: obj})
+});
 
 app.listen(3000);
 console.log('fuelMain.js');
