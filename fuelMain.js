@@ -48,13 +48,13 @@ app.post('/login', urlencoderParser, function (req, result) {
                     console.log('for user '+ req.body.email+ ' access ALLOWED');
 
                     dbFunctions.getClientOrders(function (ress) {
-                            for (let h = 0; h < ress.length; h++) {
+                            for (let h = 0; h < ress[3].length; h++) {
                                 // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
-                                orderID[h] = ress[h].orderID ;
-                                orderorderQuontity[h] =ress[h].orderQuontity ;
-                                orderFuelType[h] = ress[h].orderFuelType;
-                                orderPatrolStationType[h] = ress[h].orderPatrolStationType;
-                                orderDate[h] = ress[h].orderDate;
+                                orderID[h] = ress[3][h].orderID ;
+                                orderorderQuontity[h] =ress[3][h].orderQuontity ;
+                                orderFuelType[h] = ress[3][h].orderFuelType;
+                                orderPatrolStationType[h] = ress[3][h].orderPatrolStationType;
+                                orderDate[h] = ress[3][h].orderDate.getFullYear()+'-'+ress[3][h].orderDate.getMonth()+'-'+ ress[3][h].orderDate.getDate()+'  '+ress[3][h].orderDate.getHours()+':'+ress[3][h].orderDate.getMinutes();
 
                             }
                             let obj = {
@@ -63,16 +63,16 @@ app.post('/login', urlencoderParser, function (req, result) {
                                 orderorderQuontity: orderorderQuontity,
                                 orderFuelType: orderFuelType,
                                 orderPatrolStationType: orderPatrolStationType,
-                                orderDate: orderDate
+                                orderDate: orderDate,
+                                pageNumber: 0
                             };
+                            // console.log(orderDate);
                             // console.log(obj.orders);
                             result.render('clientCabinet' , obj)
                             // console.log(orderList);
                         }
-                        , req.body.email);
-
-                    ;
-                    
+                        , req.body.email
+                        , 1);
 
                 }
                 else {
@@ -87,14 +87,46 @@ app.post('/login', urlencoderParser, function (req, result) {
     }
 });
 
-app.post('/login/newOrderFromClient', urlencoderParser, function (req, result) {
+app.post('/clientCabinet', urlencoderParser, function (req, result) {
+    if (req.body.PageNumber){
+        let orderID = [] ;
+        let orderorderQuontity =[];
+        let orderFuelType = [];
+        let orderPatrolStationType = [];
+        let orderDate = [];
+        dbFunctions.getClientOrders(function (ress) {
+                for (let h = 0; h < ress[3].length; h++) {
+                    // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
+                    orderID[h] = ress[3][h].orderID ;
+                    orderorderQuontity[h] =ress[3][h].orderQuontity ;
+                    orderFuelType[h] = ress[3][h].orderFuelType;
+                    orderPatrolStationType[h] = ress[3][h].orderPatrolStationType;
+                    orderDate[h] = ress[3][h].orderDate.getFullYear()+'-'+ress[3][h].orderDate.getMonth()+'-'+ ress[3][h].orderDate.getDate()+'  '+ress[3][h].orderDate.getHours()+':'+ress[3][h].orderDate.getMinutes();
+
+                }
+                let obj = {
+                    data: req.body,
+                    ordersID: orderID,
+                    orderorderQuontity: orderorderQuontity,
+                    orderFuelType: orderFuelType,
+                    orderPatrolStationType: orderPatrolStationType,
+                    orderDate: orderDate,
+                    pageNumber: req.body.PageNumber
+                };
+                // console.log(orderDate);
+                // console.log(obj.orders);
+                result.render('clientCabinet' , obj)
+                // console.log(orderList);
+            }
+            , req.body.email
+            , req.body.PageNumber);
+    }
     if (!req.body) return result.sendStatus(400);
     let ft ='';
-    if (req.body.f95){ft = '95'};
+    if (req.body.f95){ft = '95'}
 
     let psType ='';
     if (req.body.psWOG) {psType = 1} else { psType = 2}
-
 
     console.log('new order');
     console.log(req.body);
@@ -114,13 +146,13 @@ app.post('/login/newOrderFromClient', urlencoderParser, function (req, result) {
         let orderPatrolStationType = [];
         let orderDate = [];
         dbFunctions.getClientOrders(function (ress) {
-                for (let h = 0; h < ress.length; h++) {
+                for (let h = 0; h < ress[3].length; h++) {
                     // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
-                    orderID[h] = ress[h].orderID ;
-                    orderorderQuontity[h] =ress[h].orderQuontity ;
-                    orderFuelType[h] = ress[h].orderFuelType;
-                    orderPatrolStationType[h] = ress[h].orderPatrolStationType;
-                    orderDate[h] = ress[h].orderDate;
+                    orderID[h] = ress[3][h].orderID ;
+                    orderorderQuontity[h] =ress[3][h].orderQuontity ;
+                    orderFuelType[h] = ress[3][h].orderFuelType;
+                    orderPatrolStationType[h] = ress[3][h].orderPatrolStationType;
+                    orderDate[h] = ress[3][h].orderDate.getFullYear()+'-'+ress[3][h].orderDate.getMonth()+'-'+ ress[3][h].orderDate.getDate()+'  '+ress[3][h].orderDate.getHours()+':'+ress[3][h].orderDate.getMinutes();
 
                 }
                 let obj = {
@@ -129,13 +161,17 @@ app.post('/login/newOrderFromClient', urlencoderParser, function (req, result) {
                     orderorderQuontity: orderorderQuontity,
                     orderFuelType: orderFuelType,
                     orderPatrolStationType: orderPatrolStationType,
-                    orderDate: orderDate
+                    orderDate: orderDate,
+                    pageNumber: 0
+
                 };
+                // console.log(orderDate);
                 // console.log(obj.orders);
                 result.render('clientCabinet' , obj)
                 // console.log(orderList);
             }
-            , req.body.email);
+            , req.body.email
+            , 0);
     }
 
 });
