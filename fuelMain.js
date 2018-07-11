@@ -23,12 +23,12 @@ app.post('/login', urlencoderParser, function (req, result) {
             dbFunctions.getSysUserLogin(function (res) {
             // console.log(res);        // do not remove
             if (res.length !== 0) {
-                console.log('for system user '+ req.body.email+ ' access ALLOWED');
+                console.log('for SYSTEM user '+ req.body.email+ ' access ALLOWED');
                 result.render('sysUserCabinet' , {data: req.body});
             }
             else {
                 result.send('Login or password are wrong');
-                console.log('for system user '+ req.body.email+ ' access DENIED');
+                console.log('for SYSTEM user '+ req.body.email+ ' access DENIED');
             }
         }
         , req.body.email
@@ -45,7 +45,7 @@ app.post('/login', urlencoderParser, function (req, result) {
 
                 // console.log(res);        // do not remove
                 if (res.length !== 0) {
-                    console.log('for user '+ req.body.email+ ' access ALLOWED');
+                    console.log('for CLIENT '+ req.body.email+ ' access ALLOWED');
 
                     dbFunctions.getClientOrders(function (ress) {
                             for (let h = 0; h < ress[3].length; h++) {
@@ -72,12 +72,12 @@ app.post('/login', urlencoderParser, function (req, result) {
                             // console.log(orderList);
                         }
                         , req.body.email
-                        , 1);
+                        , 0);
 
                 }
                 else {
                     result.send('Login or password are wrong');
-                    console.log('for user '+ req.body.email+ ' access DENIED');
+                    console.log('for CLIENT '+ req.body.email+ ' access DENIED');
                 }
             }
             , req.body.email
@@ -176,7 +176,16 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
 
 });
 
+app.post('/NewUser', urlencoderParser, function (req, result) {
+    let obj ={};
+    result.render('NewUser' , obj);
+});
 
+app.post('/CreateUser', urlencoderParser, function (req, result) {
+    console.log(req.body);
+    let obj ={};
+    result.render('NewUser' , obj);
+});
 // function fuelTypeSelector(ft){
 //    let fft = '';
 //    switch (ft) {
