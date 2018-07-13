@@ -105,7 +105,9 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
 });
 
 app.post('/NewUser', urlencoderParser, function (req, result) {
-    let obj ={};
+    let obj ={
+        userExistMesage: ' '
+    };
     result.render('NewUser' , obj);
 });
 
@@ -113,30 +115,30 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
     console.log(req.body);
     if (req.body.email || req.body.pass ) {
         dbFunctions.makeNewClient(function (res) {
-                console.log(res);
+                // console.log(res);
                 if (res === 0) { 
                     console.log('User with Login '+ req.body.email + ' already exists');
+                    let objFail = {
+                        userExistMesage: 'user with such login '+ req.body.email + ' already exists'
+                    };
+                    result.render('NewUser', objFail);
+
                 }
                 if (res !== 0) {
                     console.log('new CLIENT ' + req.body.email + ' was created');
                     // result.send('User with Login' + req.body.email + ' already exists');
+                    let objFine = {
+                        userExistMesage: 'user created'
+                    };
+                    result.render('login', obj);
                 }
             }
             , req.body.clientName
             , req.body.email
             , req.body.pass
         );
-        let obj = {};
-        result.render('login', obj);
+
     }
-});
-
-
-
-app.get('/news', function (req, res) {
-    var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
-    console.log('id:' + req.params.id, 'dd: '+req.params.dd);
-    res.render('news', {newsID: req.params.id, obj: obj})
 });
 
 app.listen(3000);
@@ -191,7 +193,6 @@ function PSSelector(psType) {
     }
     return PSName;
 
-
 }
 
 function getPSNameFromRequest( request) {
@@ -201,13 +202,18 @@ function getPSNameFromRequest( request) {
 }
 
 
-
 function fuelTypeSelector(reqWithFuelType){
     let fuelName ='';
-    console.log(reqWithFuelType);
+    // console.log(reqWithFuelType);
     if (reqWithFuelType.f95) { fuelName = '95'; return fuelName}
 
 }
+
+app.get('/news', function (req, res) {
+    var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
+    console.log('id:' + req.params.id, 'dd: '+req.params.dd);
+    res.render('news', {newsID: req.params.id, obj: obj})
+});
 
 // app.post('/about', urlencoderParser, function (req, res) {
 //     if (!req.body) return res.sendStatus(400);

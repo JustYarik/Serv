@@ -13,13 +13,12 @@ exports.SendEmail = function (callback, to, subject, text) {
 
     let mailOptions = {
         from: mailCordentials.fromEmail,
-        to: to, //
-        subject: subject, //'Sending Email using Node.js',
-        text: text //'That was easy!'
+        to: to,
+        subject: subject,
+        text: text
     };
 
     // SEND Email
-
     transporter.sendMail(mailOptions, function (error, info) {
 
         if (error) {

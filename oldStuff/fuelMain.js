@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParcer = require('body-parser');
 // var ejs = require('ejs');
-var dbFunctions = require('./DBfunctions');
+var dbFunctions = require('../DBfunctions');
 
 var app = express();
 

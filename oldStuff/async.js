@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-const add = require('DBfunctions');
+const add = require('Serv/DBfunctions');
 
 var con = mysql.createConnection({
     host: "35.192.142.83",
