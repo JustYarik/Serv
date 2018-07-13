@@ -82,7 +82,7 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
                             }
                             , 'podobaYaroslav@gmail.com' // To
                             , 'new fuel order'
-                            , 'dear ' + ClientName + ' you made a order for '+ req.body.orderQuantity + 'L of ' + fuelTypeSelector(req.body) + '('+getPSNameFromRequest(req.body)+')'
+                            , 'dear ' + ClientName + ' you made an order for '+ req.body.orderQuantity + 'L of ' + fuelTypeSelector(req.body) + '('+getPSNameFromRequest(req.body)+')'
                         );
 
                         fuelTypeSelector(req.body)
