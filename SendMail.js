@@ -18,7 +18,7 @@ exports.SendEmail = function (callback, to, subject, text) {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                    user: 'justyarik@gmail.com',
+                    user: '',
                     pass: ft
                   }
         });
