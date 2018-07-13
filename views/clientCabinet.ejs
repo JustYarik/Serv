@@ -9,19 +9,14 @@
     <div class="container w-50 float-left">
         <h1 class="text-center">Client Cabinet </h1>
         <% include bloks/header.ejs %>
-        <h2>success</h2>
-        <!--<p>-->
-            <!--<b> email:</b> <%= data.email %><br>-->
-            <!--<b> pass:</b> <%= data.pass %><br>-->
-            <!--<b> isCheck:</b> <%= data.check %><br>-->
+        <h2>Welcome <%= clientName %> </h2>
 
-        <!--</p>-->
         <p> make a new order </p>
         <!--<form method="get" action="/news">-->
         <form method="post" action="/clientCabinet">
             <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input name="email" class="form-control" id="exampleInputEmail1"  value="<%= data.email %>" readonly>
+                <label for="exampleInputEmail1">From</label>
+                <input name="email" class="form-control" id="exampleInputEmail1"  value="<%= clientEmail %>" readonly>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Quantity</label>
@@ -50,7 +45,7 @@
 <p></p>
     <div align="center" class="container w-50 float-right"> <!--w-75-->
     <form method="post" action="/clientCabinet">
-        <input hidden name="email"  value="<%= data.email %>" readonly>
+        <input hidden name="email"  value="<%= clientEmail %>" readonly>
         <input readonly name="PageNumber"  id="PN"  value="<%= pageNumber %> " size="4">
         <button type="submit" class="float-left"  onclick="prevPage()"><</button>
         <button type="submit" class="float-right" onclick="nextPage()">></button>

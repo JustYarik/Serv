@@ -28,8 +28,10 @@
 
         <script>
             function replPassword() {
-                var rawPass = document.getElementById("exampleInputPassword1").value ;
-                document.getElementById("exampleInputPassword1").value = sha1(rawPass);
+                if( document.getElementById("exampleInputPassword1").value) {
+                    var rawPass = document.getElementById("exampleInputPassword1").value;
+                    document.getElementById("exampleInputPassword1").value = sha1(rawPass);
+                }
             }
 
             function sha1(msg)

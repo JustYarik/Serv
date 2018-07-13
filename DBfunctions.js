@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var fs = require('fs');
 
+
 var con = mysql.createConnection({
                                     host: "35.192.142.83",
                                     multipleStatements: true,
@@ -37,14 +38,15 @@ exports.getClientLogin = function (callback, clientLogin, clientPassword) {
     });
 };
 
-exports.makeNerOrder = function (callback, clientEmail ,orderQuantity, orderFuelType, orderPStype) {
+exports.makeNewOrder = function (callback, clientEmail ,orderQuantity, orderFuelType, orderPStype) {
     getFileText('./query/makeNewOrder.sql', (ft)=> {
         let z1 = ft.replace('___clientLogin', clientEmail).replace('___orderQuantity', orderQuantity).replace('___orderFuelType', orderFuelType).replace('___orderPStype', orderPStype);
         con.query(z1, (err, result) => { if (err) throw err;
+            callback(returnData(result));
+
         })
     });
 };
-
 
 var getFileText = function (path, fileTextt ){
     fs.readFile(path, 'utf-8', function (err1, data) {
@@ -61,4 +63,21 @@ exports.getClientOrders = function (callback, clientEmail, pageNumber ) {
     })
 };
 
+exports.makeNewClient = function (callback, clentName ,clientEmail, passHash) {
+    getFileText('./query/makeNewClient.sql', (ft)=> {
+        let z1 = ft.replace('___clientName', clentName).replace('___clientLogin', clientEmail).replace('___clientPasswordHash', passHash);
+        con.query(z1, (err, result) => { if (err) throw err;
+            callback(returnData(result[5][0].clientWasCreated));
+        })
+    });
+};
+
+exports.getClientName = function (ClientName, clientEmail ) {
+    getFileText('./query/getClientName.sql', (ft)=> {
+        let z1 = ft.replace('___clientLogin', clientEmail);
+        con.query(z1, (err, result) => { if (err) throw err;
+            ClientName(returnData(result[1][0].clientName));
+        })
+    });
+};
 

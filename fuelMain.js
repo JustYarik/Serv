@@ -83,7 +83,6 @@ app.post('/login', urlencoderParser, function (req, result) {
             , req.body.email
             , req.body.pass );
 
-
     }
 });
 
@@ -132,7 +131,7 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
     console.log(req.body);
     // result.send('order accepted')
     if (req.body.orderQuantity && (req.body.psWOG || req.body.psOKKO ) ) {
-        dbFunctions.makeNerOrder(function (res) {
+        dbFunctions.makeNewOrder(function (res) {
                 console.log(res);
             }
             , req.body.email
@@ -183,9 +182,39 @@ app.post('/NewUser', urlencoderParser, function (req, result) {
 
 app.post('/CreateUser', urlencoderParser, function (req, result) {
     console.log(req.body);
-    let obj ={};
-    result.render('NewUser' , obj);
+    if (req.body.email || req.body.pass ) {
+        dbFunctions.makeNewClient(function (res) {
+                console.log(res);
+                if (res === 0) { 
+                    console.log('User with Login '+ req.body.email + ' already exists');
+                }
+                if (res !== 0) {
+                    console.log('new CLIENT ' + req.body.email + ' was created');
+                    // result.send('User with Login' + req.body.email + ' already exists');
+                }
+            }
+            , req.body.clientName
+            , req.body.email
+            , req.body.pass
+        );
+        let obj = {};
+        result.render('login', obj);
+    }
 });
+
+
+
+app.get('/news', function (req, res) {
+    var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
+    console.log('id:' + req.params.id, 'dd: '+req.params.dd);
+    res.render('news', {newsID: req.params.id, obj: obj})
+});
+
+app.listen(3000);
+console.log('fuelMain.js');
+console.log('server started, listening port 3000');
+
+
 // function fuelTypeSelector(ft){
 //    let fft = '';
 //    switch (ft) {
@@ -200,17 +229,3 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
 //     console.log(req.body);
 //     res.render('about-success', {data: req.body});
 // });
-
-
-app.get('/news', function (req, res) {
-    var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
-    console.log('id:' + req.params.id, 'dd: '+req.params.dd);
-    res.render('news', {newsID: req.params.id, obj: obj})
-});
-
-app.listen(3000);
-console.log('fuelMain.js');
-console.log('server started, listening port 3000');
-
-
-
