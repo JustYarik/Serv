@@ -24,8 +24,8 @@ exports.SendEmail = function (callback, to, subject, text) {
         });
 
         let mailOptions = {
-            from: 'justyarik@gmail.com',
-            to: to, //'podobaYaroslav@gmail.com',
+            from: '',
+            to: to, 
             subject: subject, //'Sending Email using Node.js',
             text: text //'That was easy!'
         };
