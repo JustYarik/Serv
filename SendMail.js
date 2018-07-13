@@ -12,7 +12,7 @@ exports.SendEmail = function (callback, to, subject, text) {
     });
 
     let mailOptions = {
-        from: 'justyarik@gmail.com',
+        from: mailCordentials.fromEmail,
         to: to, //
         subject: subject, //'Sending Email using Node.js',
         text: text //'That was easy!'
