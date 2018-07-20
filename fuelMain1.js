@@ -8,6 +8,7 @@ var app = express();
 
 var urlencoderParser = bodyParcer.urlencoded({extended: false});
 
+
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
 
@@ -25,7 +26,12 @@ app.post('/login', urlencoderParser, function (req, result) {
             // console.log(res);        // do not remove
             if (res.length !== 0) {
                 console.log('for SYSTEM user '+ req.body.email+ ' access ALLOWED');
-                result.render('sysUserCabinet' , {data: req.body});
+                systUserCabinetRender(req.body.email, 1, (systUserOrderDate)=>{
+                    result.render('sysUserCabinet' , systUserOrderDate)
+                    // result.render('sysUserCabinet' , {data: req.body});
+                });
+
+
             }
             else {
                 result.send('Login or password are wrong');
@@ -76,7 +82,10 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
         dbFunctions.makeNewOrder( (res)=> {
                 // console.log(res);
                 if (res){
+                    // sending a mail
+                    /*
                     dbFunctions.getClientName((ClientName)=>{
+
                         mail.SendEmail((callback)=>{
                                 console.log('Mail was send');
                             }
@@ -87,6 +96,7 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
 
                         fuelTypeSelector(req.body)
                     }, req.body.email)
+                    */
                 }
 
                 clientCabinetRender(req.body.email, 0, (orderDate)=>{
@@ -142,7 +152,7 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
 });
 
 app.listen(3000);
-console.log('fuelMain.js');
+console.log('fuelMain1.js');
 console.log('server started, listening port 3000');
 
 function clientCabinetRender(clientEmail, pageNumber, OrderData) {
@@ -155,33 +165,75 @@ function clientCabinetRender(clientEmail, pageNumber, OrderData) {
                                                                                                 let orderPatrolStationType = [];
                                                                                                 let orderDate = [];
                                                                                                 for (let h = 0; h < ress[3].length; h++) {
-                                                                                                // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
-                                                                                                orderID[h] = ress[3][h].orderID ;
-                                                                                                orderorderQuontity[h] =ress[3][h].orderQuontity ;
-                                                                                                orderFuelType[h] = ress[3][h].orderFuelType;
-                                                                                                orderPatrolStationType[h] = PSSelector( ress[3][h].orderPatrolStationType);
-                                                                                                orderDate[h] = ress[3][h].orderDate.getFullYear()+'-'+ress[3][h].orderDate.getMonth()+'-'+ ress[3][h].orderDate.getDate()+'  '+ress[3][h].orderDate.getHours()+':'+ress[3][h].orderDate.getMinutes();
+                                                                                                    // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
+                                                                                                    orderID[h] = ress[3][h].orderID ;
+                                                                                                    orderorderQuontity[h] =ress[3][h].orderQuontity ;
+                                                                                                    orderFuelType[h] = ress[3][h].orderFuelType;
+                                                                                                    orderPatrolStationType[h] = PSSelector( ress[3][h].orderPatrolStationType);
+                                                                                                    orderDate[h] = ress[3][h].orderDate.getFullYear()+'-'+ress[3][h].orderDate.getMonth()+'-'+ ress[3][h].orderDate.getDate()+'  '+ress[3][h].orderDate.getHours()+':'+ress[3][h].orderDate.getMinutes();
                                                                                                 }
 
                                                                                                 let obj = {
-                                                                                                clientEmail: clientEmail,
-                                                                                                clientName: ClientName,
-                                                                                                ordersID: orderID,
-                                                                                                orderorderQuontity: orderorderQuontity,
-                                                                                                orderFuelType: orderFuelType,
-                                                                                                orderPatrolStationType: orderPatrolStationType,
-                                                                                                orderDate: orderDate,
-                                                                                                pageNumber: pageNumber
-                                                                                                };
+                                                                                                            clientEmail: clientEmail,
+                                                                                                            clientName: ClientName,
+                                                                                                            ordersID: orderID,
+                                                                                                            orderorderQuontity: orderorderQuontity,
+                                                                                                            orderFuelType: orderFuelType,
+                                                                                                            orderPatrolStationType: orderPatrolStationType,
+                                                                                                            orderDate: orderDate,
+                                                                                                            pageNumber: pageNumber
+                                                                                                          };
 
                                                                                                 OrderData(obj);
-                                                                                                }
+                                                                                             }
                                                     , clientEmail
                                                     , pageNumber);
                                              }
-                                                , clientEmail
+                                , clientEmail
     );
 }
+
+function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
+    dbFunctions.getClientOrdersForSystUser((ress)=>{
+            let clientLogin =[];
+            let orderID = [] ;
+            let orderorderQuontity =[];
+            let orderFuelType = [];
+            let orderPatrolStationType = [];
+            let orderDate = [];
+            for (let h = 0; h < ress[1].length; h++) {
+                // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
+                clientLogin[h]= ress[1][h].clientLogin;
+                orderID[h] = ress[1][h].orderID ;
+                orderorderQuontity[h] =ress[1][h].orderQuontity ;
+                orderFuelType[h] = ress[1][h].orderFuelType;
+                orderPatrolStationType[h] = PSSelector( ress[1][h].orderPatrolStationType);
+                orderDate[h] = ress[1][h].orderDate.getFullYear()+'-'+ress[1][h].orderDate.getMonth()+'-'+ ress[1][h].orderDate.getDate()+'  '+ress[1][h].orderDate.getHours()+':'+ress[1][h].orderDate.getMinutes();
+            }
+
+            let obj = {
+                systUserLogin: systUserLogin,
+                // clientEmail: systUserLogin,
+                // clientName: 'SystemUser',
+                clientLogin: clientLogin,
+                ordersID: orderID,
+                orderorderQuontity: orderorderQuontity,
+                orderFuelType: orderFuelType,
+                orderPatrolStationType: orderPatrolStationType,
+                orderDate: orderDate,
+                pageNumber: pageNumber
+            };
+
+            systUserOrderDate(obj);
+            // systUserOrderDate(ress[1]);
+        // console.log(ress[1]);
+        // systUserOrderDate('OK');
+    }
+    , systUserLogin
+    , pageNumber)
+
+}
+
 
 function PSSelector(psType) {
     let PSName ='';

@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParcer = require('body-parser');
 // var ejs = require('ejs');
-var dbFunctions = require('./DBfunctions');
+var dbFunctions = require('./DBfunctions1');
 var mail = require('./SendMail');
 
 var app = express();
@@ -130,7 +130,7 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
                     let objFine = {
                         userExistMesage: 'user created'
                     };
-                    result.render('login', obj);
+                    result.render('login', objFine);
                 }
             }
             , req.body.clientName

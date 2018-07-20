@@ -2,18 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>System user Cabinet</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 </head>
 <body>
-    <h1>system User Cabinet </h1>
-    <% include bloks/header.ejs %>
-    <h2> Login success</h2>
-    <p>
-        <b> email:</b> <%= data.email %><br>
-        <b> pass:</b> <%= data.pass %><br>
-        <b> isCheck:</b> <%= data.check %><br>
+    <div class="container">
+        <h1 class="text-center">System user Cabinet</h1>
+        <% include bloks/header.ejs %>
+        <h2 align="center">Welcome  <%= systUserLogin %> </h2>
 
-    </p>
+        <!--<p> make a new order </p>-->
+        <!--<form method="get" action="/news">-->
+        <!--<form method="post" action="/clientCabinet">-->
+            <!--<div class="form-group">-->
+                <!--<label for="exampleInputEmail1">From</label>-->
+                <!--<input name="email" class="form-control" id="exampleInputEmail1"  value="<%= systUserLogin %>" readonly>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label for="exampleInputEmail1">Quantity</label>-->
+                <!--<input type="number" name="orderQuantity" class="form-control" id="orderQuantity" placeholder="should davide by 10">-->
+            <!--</div>-->
+            <!--<div class="form-group form-check">-->
+                <!--<input type="checkbox" name="f95" class="form-check-input" id="exampleCheck1">-->
+                <!--<label class="form-check-label" for="exampleCheck1">95</label>-->
+            <!--</div>-->
+            <!--<div class="form-group form-check">-->
+                <!--<input type="checkbox" name="psWOG" class="form-check-input" id="exampleCheck2" onclick="selectWOG()">-->
+                <!--<label class="form-check-label" for="exampleCheck1">WOG</label>-->
+            <!--</div>-->
+            <!--<div class="form-group form-check">-->
+                <!--<input type="checkbox" name="psOKKO" class="form-check-input" id="exampleCheck3" onclick="selectOKKO()">-->
+                <!--<label class="form-check-label" for="exampleCheck1">OKKO</label>-->
+            <!--</div>-->
+            <!--<button type="submit" class="btn btn-primary">Make Order</button>-->
+
+            <!--<script>-->
+                <!--function selectWOG() { document.getElementById("exampleCheck3").checked = false; }-->
+                <!--function selectOKKO() { document.getElementById("exampleCheck2").checked = false; }-->
+            <!--</script>-->
+        <!--</form>-->
+    </div>
+<p></p>
+    <div align="center" class="container"> <!--w-75-->
+    <form method="post" action="/clientCabinet">
+        <input hidden name="email"  value="<%= systUserLogin %>" readonly>
+        <input readonly name="PageNumber"  id="PN"  value="<%= pageNumber %> " size="4">
+        <button type="submit" class="float-left"  onclick="prevPage()"><</button>
+        <button type="submit" class="float-right" onclick="nextPage()">></button>
+        <script>
+            function nextPage() { document.getElementById("PN").value= parseInt(document.getElementById("PN").value) + 1; }
+            function prevPage() { document.getElementById("PN").value= parseInt(document.getElementById("PN").value) - 1; }
+        </script>
+    </form>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>Order ID</th>
+                <th>Client Login</th>
+                <th>Order date</th>
+                <th>Quantity</th>
+                <th>fuel type</th>
+                <th>PS type</th>
+            </tr>
+           <% for(let l=0; l< ordersID.length; l++ ){ %>
+                <tr>
+                    <td><%= ordersID[l] %> </td>
+                    <td><%= clientLogin[l] %> </td>
+                    <td><%= orderDate[l] %> </td>
+                    <td><%= orderorderQuontity[l] %> </td>
+                    <td><%= orderFuelType[l] %> </td>
+                    <td><%= orderPatrolStationType[l] %> </td>
+                </tr>
+           <% } %>
+        </table>
+    </div>
+
 </body>
 </html>

@@ -1,0 +1,9 @@
+env: flex
+runtime: nodejs
+
+env_variables:
+  SQL_USER: root
+  SQL_PASSWORD: 1111
+  SQL_DATABASE: newmysqldb
+  # e.g. my-awesome-project:us-central1:my-cloud-sql-instance
+  INSTANCE_CONNECTION_NAME: upbeat-repeater-208313:us-central1:newmysqldb

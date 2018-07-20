@@ -7,8 +7,8 @@ var con = mysql.createConnection({
                                     multipleStatements: true,
                                     user: "root",
                                     password: "1111",
-                                    database: "fuel"
-
+                                    database: "fuel",
+                                    port: 3306
                                 });
 
 
@@ -81,3 +81,11 @@ exports.getClientName = function (ClientName, clientEmail ) {
     });
 };
 
+exports.getClientOrdersForSystUser = function (callback, systUserLogin, pageNumber ) {
+    getFileText('./query/getClientOrdersForSystUser.sql', (ft)=> {
+        let z = ft.replace('___systUserLogin', systUserLogin).replace('___PN', pageNumber);
+        con.query(z, (err, result) => { if (err) throw err;
+            callback(returnData(result));
+        })
+    })
+};

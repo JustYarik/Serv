@@ -5,7 +5,16 @@
  SET @clientLogin   = '___clientLogin';
 
 
-INSERT INTO orders (orderClientID, orderName, orderDate, orderQuontity, orderFuelType, orderPatrolStationType )
+INSERT INTO orders (
+                        orderClientID
+                      , orderName
+                      , orderDate
+                      , orderQuontity
+                      , orderFuelType
+                      , orderPatrolStationType
+                      , orderResponsibleID
+                      , orderStatus
+                   )
   SELECT
     (
       SELECT clientID FROM clients
@@ -17,5 +26,12 @@ INSERT INTO orders (orderClientID, orderName, orderDate, orderQuontity, orderFue
     , @orderQuantity
     , @orderFuelType
     , @orderPStype
+    , (
+        SELECT
+          c.systUserResponsibleForClient
+        FROM clients AS c
+        WHERE clientLogin = @clientLogin
+      )
+    , 1 #new
 ;
 
