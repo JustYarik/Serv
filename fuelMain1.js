@@ -7,10 +7,26 @@ var mail = require('./SendMail');
 var app = express();
 
 var urlencoderParser = bodyParcer.urlencoded({extended: false});
+server = app.listen(3000);
+const io = require("socket.io")(server);
 
 
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
+
+io.on('connection', (socket)=> {
+    console.log('new user connected');
+
+    // listen a new_nessage
+    // socket.on('new_message', (data) => {
+        // bordercast the new message
+        for (let g =0; g<10; g++){
+            // io.sockets.emit('new_message', {message: data.message, username: socket.username});
+            io.sockets.emit('new_message', {message: g });
+        }
+
+    // });
+});
 
 
 app.get('/', function (req, res) {
@@ -151,7 +167,7 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
     }
 });
 
-app.listen(3000);
+
 console.log('fuelMain1.js');
 console.log('server started, listening port 3000');
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon fuelMain2"
   },
   "dependencies": {
     "body-parser": "latest",
@@ -18,6 +18,20 @@
     "nodemailer": "^4.6.7",
     "process": "^0.11.10",
     "pug": "2.0.0-beta11",
-    "request": "latest"
-  }
+    "request": "latest",
+    "socket.io": "^2.1.1"
+  },
+  "main": "fuelMain1",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JustYarik/Serv.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JustYarik/Serv/issues"
+  },
+  "homepage": "https://github.com/JustYarik/Serv#readme",
+  "description": ""
 }
