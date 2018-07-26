@@ -2,3 +2,6 @@ chat
 Build a simple chat app with node.js and socket.io
 https://medium.com/@noufel.gouirhate/build-a-simple-chat-app-with-node-js-and-socket-io-ea716c093088
 
+Node.js клиент для сервера socket.io
+http://qaru.site/questions/55890/nodejs-client-for-a-socketio-server
+

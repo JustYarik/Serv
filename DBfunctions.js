@@ -41,8 +41,38 @@ exports.getClientLogin = function (callback, clientLogin, clientPassword) {
 exports.makeNewOrder = function (callback, clientEmail ,orderQuantity, orderFuelType, orderPStype) {
     getFileText('./query/makeNewOrder.sql', (ft)=> {
         let z1 = ft.replace('___clientLogin', clientEmail).replace('___orderQuantity', orderQuantity).replace('___orderFuelType', orderFuelType).replace('___orderPStype', orderPStype);
-        con.query(z1, (err, result) => { if (err) throw err;
-            callback(returnData(result));
+        con.query(z1, (err, result) => {
+            if (err) throw err;
+            if (result){
+                getFileText('./query/getLastClientOrder.sql', (fft)=> {
+                    let z2 = fft.replace('___clientLogin', clientEmail);
+                    con.query(z2,(err2, res2)=>{
+                        if (err2) throw err2;
+                        // console.log(res2[1] );
+
+                        let orderData = {
+                            systUserLogin: [4442],
+                            clientLogin: [clientEmail],
+                            ordersID: [res2[1][0].orderID],
+                            orderorderQuontity: [orderQuantity],
+                            orderFuelType: [orderFuelType],
+                            orderPatrolStationType: [ PSSelector(orderPStype)],
+                            orderDate: [
+                                            res2[1][0].orderDate.getFullYear()+'-'+res2[1][0].orderDate.getMonth()+'-'+ res2[1][0].orderDate.getDate()+'  '+res2[1][0].orderDate.getHours()+':'+res2[1][0].orderDate.getMinutes()
+                                       ],
+                            pageNumber: [0]
+                        };
+
+                        callback(returnData(orderData))
+                    })
+                });
+
+
+            }
+            else {
+                callback(returnData(result));
+            }
+
 
         })
     });
@@ -89,3 +119,14 @@ exports.getClientOrdersForSystUser = function (callback, systUserLogin, pageNumb
         })
     })
 };
+
+function PSSelector(psType) {
+    let PSName ='';
+    switch (psType) {
+        case 1:
+            PSName = 'WOG'; break;
+        case 2:
+            PSName = 'OKKO'; break;
+    }
+    return PSName;
+}

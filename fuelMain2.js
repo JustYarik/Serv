@@ -3,6 +3,9 @@ var bodyParcer = require('body-parser');
 // var ejs = require('ejs');
 var dbFunctions = require('./DBfunctions');
 var mail = require('./SendMail');
+var sucupdate = require('./updSUCabinet');
+// var sssoket  = require('./public/orderListSU');
+
 
 var app = express();
 
@@ -10,11 +13,8 @@ var urlencoderParser = bodyParcer.urlencoded({extended: false});
 server = app.listen(3000);
 const io = require("socket.io")(server);
 
-
-
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
-
 
 app.get('/', function (req, res) {
     res.render('login');
@@ -32,17 +32,12 @@ app.post('/login', urlencoderParser, function (req, result) {
                 systUserCabinetRender(req.body.email, 1, (systUserOrderDate)=>{
                     result.render('sysUserCabinet' , systUserOrderDate);
 
-                    io.on('connection', (socket)=> {
-                        console.log('new user connected');
+                    setTimeout(()=>{
+                        sucupdate.updateCabinet(systUserOrderDate);
+                    }, 1000);
 
-                        // listen a new_nessage
-                        socket.on('new_message', (data)=>{
-                            // bordercast the new message
-                            io.sockets.emit('new_message', data );
-                            console.log(data.message);
-                        });
-                    });
-                    // console.log('line 35');
+
+
                 });
 
 
@@ -96,18 +91,7 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
         dbFunctions.makeNewOrder( (res)=> {
                 // console.log(res);
                 if (res){
-                    let obj = {
-                        systUserLogin: 1,
-                        clientLogin: 2,
-                        ordersID: 3,
-                        orderorderQuontity: 4,
-                        orderFuelType: 5,
-                        orderPatrolStationType: 6,
-                        orderDate: 7,
-                        pageNumber: 0
-                    };
-
-
+                    sucupdate.updateCabinet(res);
 
                     // sending a mail
                     /*
@@ -264,16 +248,17 @@ function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
 
 // function refreshSUCabinet( obj) {
 //     console.log('refreshSUCabinet');
-    io.on('connection', (socket)=> {
-        console.log('new user connected');
+io.on('connection', (socket)=> {
+    console.log('new user connected fuelMain2');
 
-        // listen a new_nessage
-        socket.on('new_message', (data)=>{
-            // bordercast the new message
-            io.sockets.emit('new_message', data );
-            console.log(data.message);
-        });
+    // listen a new_nessage
+    socket.on('new_message', (data)=>{
+        // bordercast the new message
+        io.sockets.emit('new_message', data );
+        // console.log(data.message);
+        console.log('new message fuelMain2');
     });
+});
 
 function PSSelector(psType) {
     let PSName ='';
@@ -284,7 +269,6 @@ function PSSelector(psType) {
             PSName = 'OKKO'; break;
     }
     return PSName;
-
 }
 
 function getPSNameFromRequest( request) {

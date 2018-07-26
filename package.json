@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon fuelMain2"
+    "start": "nodemon fuelMain2.js"
   },
   "dependencies": {
     "body-parser": "latest",
@@ -19,7 +19,8 @@
     "process": "^0.11.10",
     "pug": "2.0.0-beta11",
     "request": "latest",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1"
   },
   "main": "fuelMain1",
   "devDependencies": {},

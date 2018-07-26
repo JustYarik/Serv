@@ -1,0 +1,18 @@
+
+SET @clientLogin ='___clientLogin';
+
+SELECT
+      o.orderID
+    , o.orderQuontity
+    , o.orderFuelType
+    , o.orderPatrolStationType
+    , o.orderDate
+FROM orders AS o
+WHERE orderClientID = (
+                        SELECT
+                          clientID
+                        FROM clients
+                        WHERE upper ( clientLogin ) = upper (@clientLogin)
+                    )
+ORDER BY orderID DESC
+LIMIT 1

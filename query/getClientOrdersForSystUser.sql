@@ -16,5 +16,5 @@ JOIN sysUsers AS s
       AND upper(s.sUserLogin) = upper(@systUserLogin)
 
 JOIN clients c ON o.orderClientID = c.clientID
-ORDER BY o.orderID DESC
+ORDER BY o.orderID ASC
 ;
