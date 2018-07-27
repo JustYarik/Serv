@@ -16,3 +16,11 @@ WHERE orderClientID = (
                     )
 ORDER BY orderID DESC
 LIMIT 1
+;
+
+SELECT
+  upper(su.sUserLogin) sUserLogin
+FROM sysUsers AS su
+JOIN clients  AS c
+  ON su.sUserID = c.systUserResponsibleForClient
+    AND upper(c.clientLogin) = upper(@clientLogin)

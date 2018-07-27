@@ -15,6 +15,16 @@ const io = require("socket.io")(server);
 
 app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
+///////////////////////////////////////////////////////////////////////
+var sessions = [
+                    //   [ '1@com',  'SID_1']
+                    // , [ '2@com', 'SID_2']
+               ];
+
+
+
+
+
 
 app.get('/', function (req, res) {
     res.render('login');
@@ -28,7 +38,7 @@ app.post('/login', urlencoderParser, function (req, result) {
             dbFunctions.getSysUserLogin(function (res) {
             // console.log(res);        // do not remove
             if (res.length !== 0) {
-                console.log('for SYSTEM user '+ req.body.email+ ' access ALLOWED');
+                console.log('F: fuelMain2 --> for SYSTEM user '+ req.body.email+ ' access ALLOWED');
                 systUserCabinetRender(req.body.email, 1, (systUserOrderDate)=>{
                     result.render('sysUserCabinet' , systUserOrderDate);
 
@@ -37,14 +47,11 @@ app.post('/login', urlencoderParser, function (req, result) {
                     }, 1000);
 
 
-
                 });
-
-
             }
             else {
                 result.send('Login or password are wrong');
-                console.log('for SYSTEM user '+ req.body.email+ ' access DENIED');
+                console.log('F: fuelMain2 --> for SYSTEM user '+ req.body.email+ ' access DENIED');
             }
         }
         , req.body.email
@@ -55,14 +62,14 @@ app.post('/login', urlencoderParser, function (req, result) {
         dbFunctions.getClientLogin(function (res) {
                 // console.log(res);        // do not remove
                 if (res.length !== 0) {
-                    console.log('for CLIENT '+ req.body.email+ ' access ALLOWED');
+                    console.log('F: fuelMain2 --> for CLIENT '+ req.body.email+ ' access ALLOWED');
                     clientCabinetRender(req.body.email, 0, (orderDate)=>{
                         result.render('clientCabinet' , orderDate)
                     });
                 }
                 else {
                     result.send('Login or password are wrong');
-                    console.log('for CLIENT '+ req.body.email+ ' access DENIED');
+                    console.log('F: fuelMain2 --> for CLIENT '+ req.body.email+ ' access DENIED');
                 }
             }
             , req.body.email
@@ -84,8 +91,8 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
     let psType ='';
     if (req.body.psWOG) {psType = 1} else { psType = 2}
 
-    console.log('new order');
-    console.log(req.body);
+    console.log('F: fuelMain2 --> new order');
+    console.log( req.body);
     // result.send('order accepted')
     if (req.body.orderQuantity && (req.body.psWOG || req.body.psOKKO ) ) {
         dbFunctions.makeNewOrder( (res)=> {
@@ -98,7 +105,7 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
                     dbFunctions.getClientName((ClientName)=>{
 
                         mail.SendEmail((callback)=>{
-                                console.log('Mail was send');
+                                console.log('F: fuelMain2 --> Mail was send');
                             }
                             , 'podobaYaroslav@gmail.com' // To
                             , 'new fuel order'
@@ -122,7 +129,6 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
             , psType
         );
     }
-
 });
 
 app.post('/NewUser', urlencoderParser, function (req, result) {
@@ -138,7 +144,7 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
         dbFunctions.makeNewClient(function (res) {
                 // console.log(res);
                 if (res === 0) { 
-                    console.log('User with Login '+ req.body.email + ' already exists');
+                    console.log('F: fuelMain2 --> User with Login '+ req.body.email + ' already exists');
                     let objFail = {
                         userExistMesage: 'user with such login '+ req.body.email + ' already exists'
                     };
@@ -146,12 +152,12 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
 
                 }
                 if (res !== 0) {
-                    console.log('new CLIENT ' + req.body.email + ' was created');
+                    console.log('F: fuelMain2 --> new CLIENT ' + req.body.email + ' was created');
                     // result.send('User with Login' + req.body.email + ' already exists');
                     let objFine = {
                         userExistMesage: 'user created'
                     };
-                    result.render('login', obj);
+                    result.render('login', objFine);
                 }
             }
             , req.body.clientName
@@ -163,8 +169,8 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
 });
 
 
-console.log('fuelMain2.js');
-console.log('server started, listening port 3000');
+console.log('F: fuelMain2 --> fuelMain2.js');
+console.log('F: fuelMain2 --> server started, listening port 3000');
 
 function clientCabinetRender(clientEmail, pageNumber, OrderData) {
     dbFunctions.getClientName((ClientName)=>{
@@ -249,15 +255,49 @@ function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
 // function refreshSUCabinet( obj) {
 //     console.log('refreshSUCabinet');
 io.on('connection', (socket)=> {
-    console.log('new user connected fuelMain2');
+
+
+    // list of sockets
+    io.clients((error, clients) => {
+        if (error) throw error;
+        console.log(clients);
+    });
+
+
+    // io.to('uyWY0zAjECpANNL3AAAA').emit('new_message', {message: 'hello'});
+
+    console.log('F: fuelMain2 --> new user connected, socket.id: ' + socket.id);
 
     // listen a new_nessage
     socket.on('new_message', (data)=>{
         // bordercast the new message
-        io.sockets.emit('new_message', data );
-        // console.log(data.message);
-        console.log('new message fuelMain2');
+        // io.sockets.emit('new_message', data );
+        console.log(data.message.systUserLogin);
+        findSocketIDbySULogin(data.message.systUserLogin, (cb)=>{
+            console.log(cb);
+            console.log(sessions);
+            for (let y = 0; y < cb.length; y++){
+                console.log('line 280');
+                console.log(
+                                ''
+                           );
+                io.to(sessions[cb[y]][1]).emit('new_message', data);
+            }
+        });
+        console.log('F: fuelMain2 --> new message ');
     });
+    
+    socket.on('disconnect', ()=>{
+
+        // delFromSessions();
+        console.log('F: fuelMain2 --> Cabinet disconnected, socket.id: ' + socket.id);
+    });
+
+    socket.on('susername', (data1)=>{
+        addSession(data1.username, socket.id );
+        console.log('USERNAME');
+        console.log(sessions);
+    })
 });
 
 function PSSelector(psType) {
@@ -285,11 +325,43 @@ function fuelTypeSelector(reqWithFuelType){
 
 }
 
+function addSession(suserLogin, socketID, addSessionCB ){
+    sessions.push([suserLogin, socketID ] );
+    // addSessionCB(sessions);
+    console.log(sessions);
+}
+
+function findSocketIDbySULogin(susername, CB){
+    let socketIDofLoockedSuser = [];
+    console.log(sessions);
+
+    console.log('L338 '+sessions.length);
+    for (let t = 0; t < sessions.length; t++) {
+        console.log('L340 '+sessions[t][0].toUpperCase() );
+        console.log('L341 '+susername);
+        // let uc = susername.toUpperCase();
+        console.log('L342 '+susername);
+        // console.log('L344'+uc);
+       if (sessions[t][0].toUpperCase() ===  susername){
+                socketIDofLoockedSuser.push(t);
+            }
+    }
+    CB(socketIDofLoockedSuser);
+}
+
+
+
 app.get('/news', function (req, res) {
     var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
     console.log('id:' + req.params.id, 'dd: '+req.params.dd);
     res.render('news', {newsID: req.params.id, obj: obj})
 });
+
+// app.get('/order', urlencoderParser, function (req, res) {
+//     if (!req.body) return res.sendStatus(400);
+//     console.log(req.body);
+//     res.render('about', {data: req.body});
+// });
 
 // app.post('/about', urlencoderParser, function (req, res) {
 //     if (!req.body) return res.sendStatus(400);

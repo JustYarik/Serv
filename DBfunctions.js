@@ -15,7 +15,7 @@ var con = mysql.createConnection({
 con.connect((err) => {
     if (err) { throw err; }
     console.log();
-    console.log('MySQL Connected...');
+    console.log('F: DBfunctions --> MySQL Connected...');
 });
 
 function returnData(data){ return data; }
@@ -48,10 +48,10 @@ exports.makeNewOrder = function (callback, clientEmail ,orderQuantity, orderFuel
                     let z2 = fft.replace('___clientLogin', clientEmail);
                     con.query(z2,(err2, res2)=>{
                         if (err2) throw err2;
-                        // console.log(res2[1] );
+                        console.log('F: DBfunctions --> '+res2[2][0] );
 
                         let orderData = {
-                            systUserLogin: [4442],
+                            systUserLogin: [ res2[2][0].sUserLogin.toUpperCase() ],
                             clientLogin: [clientEmail],
                             ordersID: [res2[1][0].orderID],
                             orderorderQuontity: [orderQuantity],
@@ -61,6 +61,7 @@ exports.makeNewOrder = function (callback, clientEmail ,orderQuantity, orderFuel
                                             res2[1][0].orderDate.getFullYear()+'-'+res2[1][0].orderDate.getMonth()+'-'+ res2[1][0].orderDate.getDate()+'  '+res2[1][0].orderDate.getHours()+':'+res2[1][0].orderDate.getMinutes()
                                        ],
                             pageNumber: [0]
+
                         };
 
                         callback(returnData(orderData))

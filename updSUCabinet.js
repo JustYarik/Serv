@@ -5,9 +5,12 @@ let io = require('socket.io-client');
 
     // Add a connect listener
     socket.on('connect', function (socket) {
-        console.log('Connected!');
+        console.log('F: updSUCabinet --> Connected!');
 
     });
 exports.updateCabinet = function (ordersList) {
+    console.log('F: updSUCAbinet --> ');
+    // console.log(ordersList);
     socket.emit('new_message', {message: ordersList});
+    
 };
