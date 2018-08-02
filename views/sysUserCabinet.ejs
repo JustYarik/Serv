@@ -28,6 +28,7 @@
             function prevPage() { document.getElementById("PN").value= parseInt(document.getElementById("PN").value) - 1; }
         </script>
     </form>
+    <!--<form method="post" action="/orderCancelBySystemUser">-->
         <table class="table table-bordered table-hover" id="SUorderTable">
             <tr>
                 <th>Order ID</th>
@@ -38,17 +39,8 @@
                 <th>PS type</th>
                 <th>options</th>
             </tr>
-           <!--<% for(let l=0; l< ordersID.length; l++ ){ %>-->
-                <!--<tr>-->
-                    <!--<td><%= ordersID[l] %> </td>-->
-                    <!--<td><%= clientLogin[l] %> </td>-->
-                    <!--<td><%= orderDate[l] %> </td>-->
-                    <!--<td><%= orderorderQuontity[l] %> </td>-->
-                    <!--<td><%= orderFuelType[l] %> </td>-->
-                    <!--<td><%= orderPatrolStationType[l] %> </td>-->
-                <!--</tr>-->
-           <!--<% } %>-->
         </table>
+    <!--</form>-->
     </div>
 
 </body>

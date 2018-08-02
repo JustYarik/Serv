@@ -121,6 +121,16 @@ exports.getClientOrdersForSystUser = function (callback, systUserLogin, pageNumb
     })
 };
 
+exports.ordersDeleteBySystemUser = function (systUserLogin, orderID, ocbsuCB  ) {
+    getFileText('./query/deleteOrderBySystemUser.sql', (ft)=> {
+        let z = ft.replace('___systUserLogin', systUserLogin).replace('___orderID', orderID);
+        con.query(z, (err, result) => { if (err) throw err;
+            ocbsuCB(returnData(result));
+        })
+    })
+};
+
+
 function PSSelector(psType) {
     let PSName ='';
     switch (psType) {

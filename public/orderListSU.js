@@ -33,23 +33,45 @@ $(function () {
                     "<td>"+ data.message.orderFuelType[j]           +"</td>" +
                     "<td>"+ data.message.orderPatrolStationType[j]  +"</td>" +
                     "<td>" +
-                                "<button type=\"button\" id='bntOrderOperationDelivered' name='D" + data.message.ordersID[j]  + "' >delivered</button>" +
+                                "<button type='button' id='bntOrderOperationDelivered'  name='D" + data.message.ordersID[j]  + "' >delivered</button>" +
                                 "&nbsp;&nbsp;&nbsp;"+
-                                "<button type=\"button\" id='bntOrderOperationEdit'      name='E" + data.message.ordersID[j]  + "' >edit</button>" +
+                                "<button type='button' id='bntOrderOperationEdit'       name='E" + data.message.ordersID[j]  + "' >edit</button>" +
                                 "&nbsp;&nbsp;&nbsp;"+
-                                "<button type=\"button\" id='bntOrderOperationCancel'    name='C" + data.message.ordersID[j]  + "' > cancel</button>" +
+                                "<button type='button'  id='bntOrderOperationCancel'    name='C" + data.message.ordersID[j]  + "' >cancel</button>" +
                 "</td>"+
                 "</tr>");
+
                 // */
         }
+
+        $(":button[name*='C']").click(function (e) {
+            var clickedName = e.target.name;
+            socket.emit('orderCancelBySystemUser', {orderID: clickedName.substr(1)} );
+            console.log(clickedName);
+        })
     });
 
     // emit a username
     // send_username.click(function () {
-        console.log(susername.val());
-        socket.emit('susername', {username: susername.val()})
+    //     console.log(susername.val());
+        socket.emit('susername', {username: susername.val()});
     // });
 
+
+
+
+
+    // setTimeout(()=>{
+    //     var cancButt = ;
+    //     console.log(cancButt[1].name);
+    // }, 3000);
+
+
+
+
+
+
+    // socket.on("deledeOrderBySystemUser", )
     // emit typing
     // message.bind('keypress', ()=>{
     //     socket.emit('typing')

@@ -44,6 +44,7 @@ app.post('/login', urlencoderParser, function (req, result) {
 
                     setTimeout(()=>{
                         sucupdate.updateCabinet(systUserOrderDate);
+                        console.log('F: fuelMain2 --> system user cabinet was updated ');
                     }, 1000);
 
 
@@ -121,7 +122,6 @@ app.post('/clientCabinet', urlencoderParser, function (req, result) {
                     result.render('clientCabinet' , orderDate)
                 });
 
-                console.log( );
             }
             , req.body.email
             , req.body.orderQuantity
@@ -260,7 +260,7 @@ io.on('connection', (socket)=> {
     // list of sockets
     io.clients((error, clients) => {
         if (error) throw error;
-        console.log(clients);
+        // console.log(clients);
     });
 
 
@@ -272,15 +272,12 @@ io.on('connection', (socket)=> {
     socket.on('new_message', (data)=>{
         // bordercast the new message
         // io.sockets.emit('new_message', data );
-        console.log(data.message.systUserLogin);
-        findSocketIDbySULogin(data.message.systUserLogin, (cb)=>{
-            console.log(cb);
+        // console.log(data.message.systUserLogin);
+        findSocketIDbySULogin((data.message.systUserLogin+'').toUpperCase(), (cb)=>{
+            // console.log(cb);
             console.log(sessions);
             for (let y = 0; y < cb.length; y++){
-                console.log('line 280');
-                console.log(
-                                ''
-                           );
+                // console.log('line 280');
                 io.to(sessions[cb[y]][1]).emit('new_message', data);
             }
         });
@@ -291,13 +288,32 @@ io.on('connection', (socket)=> {
 
         // delFromSessions();
         console.log('F: fuelMain2 --> Cabinet disconnected, socket.id: ' + socket.id);
+        deleteSessions(socket.id, (CB_sessions)=>{
+            console.log(CB_sessions);
+        })
     });
 
     socket.on('susername', (data1)=>{
         addSession(data1.username, socket.id );
-        console.log('USERNAME');
-        console.log(sessions);
-    })
+        // console.log('USERNAME');
+        // console.log(sessions);
+    });
+    
+    
+    socket.on('orderCancelBySystemUser', (orderID)=>{
+        // find suser Login in sessions
+        for(let  i = sessions.length - 1; i >= 0; i--) {
+            if(sessions[i][1] === socket.id) {
+                let suserLogin = sessions[i][0];
+                dbFunctions.ordersDeleteBySystemUser(suserLogin, orderID.orderID, (cb)=>{
+                    console.log('order ' + orderID.orderID + ' was deleted');
+                } )
+            }
+        }
+        console.log(orderID.orderID, socket.id);
+        }
+    //
+    )
 });
 
 function PSSelector(psType) {
@@ -330,18 +346,24 @@ function addSession(suserLogin, socketID, addSessionCB ){
     // addSessionCB(sessions);
     console.log(sessions);
 }
+function deleteSessions(socketID, CB_session) {
+    for(let  i = sessions.length - 1; i >= 0; i--) {
+        if(sessions[i][1] === socketID) {
+            sessions.splice(i, 1);
+        }
+        CB_session(sessions);
+    }
+}
+
 
 function findSocketIDbySULogin(susername, CB){
     let socketIDofLoockedSuser = [];
     console.log(sessions);
 
-    console.log('L338 '+sessions.length);
+    console.log('L344 sessions.Length:  ' + sessions.length);
     for (let t = 0; t < sessions.length; t++) {
-        console.log('L340 '+sessions[t][0].toUpperCase() );
-        console.log('L341 '+susername);
-        // let uc = susername.toUpperCase();
-        console.log('L342 '+susername);
-        // console.log('L344'+uc);
+        // console.log('L341 '+sessions[t][0].toUpperCase() );
+        // console.log('L342 '+susername);
        if (sessions[t][0].toUpperCase() ===  susername){
                 socketIDofLoockedSuser.push(t);
             }
@@ -349,7 +371,9 @@ function findSocketIDbySULogin(susername, CB){
     CB(socketIDofLoockedSuser);
 }
 
+function orderCancelBySystemUser(suserLogin, orderID){
 
+}
 
 app.get('/news', function (req, res) {
     var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
