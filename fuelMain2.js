@@ -46,8 +46,6 @@ app.post('/login', urlencoderParser, function (req, result) {
                         sucupdate.updateCabinet(systUserOrderDate);
                         console.log('F: fuelMain2 --> system user cabinet was updated ');
                     }, 1000);
-
-
                 });
             }
             else {
@@ -302,15 +300,23 @@ io.on('connection', (socket)=> {
     
     socket.on('orderCancelBySystemUser', (orderID)=>{
         // find suser Login in sessions
-        for(let  i = sessions.length - 1; i >= 0; i--) {
+            let suserLogin = '';
+            for(let  i = sessions.length - 1; i >= 0; i--) {
             if(sessions[i][1] === socket.id) {
-                let suserLogin = sessions[i][0];
+                suserLogin = sessions[i][0];
                 dbFunctions.ordersDeleteBySystemUser(suserLogin, orderID.orderID, (cb)=>{
                     console.log('order ' + orderID.orderID + ' was deleted');
+
                 } )
             }
         }
         console.log(orderID.orderID, socket.id);
+            systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
+                    sucupdate.updateCabinet(systUserOrderDate);
+                    console.log('F: fuelMain2 --> system user cabinet was updated ');
+                }
+            );
+
         }
     //
     )

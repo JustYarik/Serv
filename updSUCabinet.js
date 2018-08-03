@@ -5,7 +5,7 @@ let io = require('socket.io-client');
 
     // Add a connect listener
     socket.on('connect', function (socket) {
-        console.log('F: updSUCabinet --> Connected!');
+        console.log('F: updSUCabinet --> system user cabinet sender Connected!');
 
     });
 exports.updateCabinet = function (ordersList) {
