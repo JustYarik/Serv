@@ -22,9 +22,7 @@ $(function () {
     // Listen on new_message
     socket.on("new_message", (data)=>{
         console.log('data.message.length ', data.message.clientLogin.length);
-        // clearTable((cb)=>{
-        //     console.log('CB', cb);
-            console.log(data);
+        console.log(data);
         if( data.message.ordersID.length === 1)    {
             console.log('L=1');
             for (let jj=0; jj< data.message.clientLogin.length; jj++ ) {
@@ -40,8 +38,8 @@ $(function () {
                     "<td>" +
                     "<button type='button' id='bntOrderOperationDelivered'  name='D" + data.message.ordersID[jj]  + "' >delivered</button>" +
                     "&nbsp;&nbsp;&nbsp;"+
-                    "<button type='button' id='bntOrderOperationEdit'       name='E" + data.message.ordersID[jj]  + "' >edit</button>" +
-                    "&nbsp;&nbsp;&nbsp;"+
+                    // "<button type='button' id='bntOrderOperationEdit'       name='E" + data.message.ordersID[jj]  + "' >edit</button>" +
+                    // "&nbsp;&nbsp;&nbsp;"+
                     "<button type='button'  id='bntOrderOperationCancel'    name='C" + data.message.ordersID[jj]  + "' >cancel</button>" +
                     "</td>"+
                     "</tr>"
@@ -51,10 +49,10 @@ $(function () {
         else {
             if (data) {
                 var txt = "<tbody>"
-                    + "<tr>\n" +
+                    + "<tr bgcolor='#ceccd0'>\n" +
                     "                <th>Order ID</th>\n" +
                     // "                <th>order Status</th>\n" +
-                    "                <th>Client Login1</th>\n" +
+                    "                <th>Client Login</th>\n" +
                     "                <th>Order date</th>\n" +
                     "                <th>Quantity</th>\n" +
                     "                <th>Fuel type</th>\n" +
@@ -63,7 +61,9 @@ $(function () {
                     " </tr>";
                 for (let j = 0; j < data.message.clientLogin.length; j++) {
                     txt = txt +
-                        "<tr id='row'>" +
+                        "<tr id='row"+ data.message.ordersID[j]  +"' " +
+                            "bgcolor='" + DeliveredColorSelector(data.message.orderStatusID[j]) +"'"+
+                            ">" +
                         "<td> <a href='/order'>" + data.message.ordersID[j] + "</a> </td>" +
                         // "<td>"+ data.message.orderStatusID[j]           +"</td>" +
                         "<td>" + data.message.clientLogin[j] + "</td>" +
@@ -74,8 +74,8 @@ $(function () {
                         "<td>" +
                         "<button type='button' id='bntOrderOperationDelivered'  name='D" + data.message.ordersID[j] + "' >delivered</button>" +
                         "&nbsp;&nbsp;&nbsp;" +
-                        "<button type='button' id='bntOrderOperationEdit'       name='E" + data.message.ordersID[j] + "' >edit</button>" +
-                        "&nbsp;&nbsp;&nbsp;" +
+                        // "<button type='button' id='bntOrderOperationEdit'       name='E" + data.message.ordersID[j] + "' >edit</button>" +
+                        // "&nbsp;&nbsp;&nbsp;" +
                         "<button type='button' id='bntOrderOperationCancel'     name='C" + data.message.ordersID[j] + "' >cancel</button>" +
                         "</td>" +
                         "</tr>";
@@ -93,16 +93,14 @@ $(function () {
                 console.log(clickedName);
             });
 
-            
+            $(":button[name*='D']").click(function (e) {
+                var clickedName = e.target.name;
+                socket.emit('orderDelivered', {orderID: clickedName.substr(1)} );
+                console.log(clickedName);
 
-
-            // $(":button[name*='D']").click(function (e) {
-            //     var clickedName = e.target.name;
-            //     socket.emit('orderDelivered', {orderID: clickedName.substr(1)} );
-            //     console.log(clickedName);
-            // })
-
-        // });
+                // change color
+                $("#row"+clickedName.substr(1)).css('background', '#bfd0c1');
+            })
 
     });
 
@@ -112,33 +110,19 @@ $(function () {
         socket.emit('susername', {username: susername.val()});
     // });
 
-function clearTable(clearTableCB) {
-    let j = document.getElementById("SUorderTable");
-    // j.innerHTML = "<tr>\n" +
-    //     "                <th>Order ID</th>\n" +
-    //     "                <!--<th>order Status</th>-->\n" +
-    //     "                <th>Client Login</th>\n" +
-    //     "                <th>Order date</th>\n" +
-    //     "                <th>Quantity</th>\n" +
-    //     "                <th>fuel type</th>\n" +
-    //     "                <th>PS type</th>\n" +
-    //     "                <th>options</th>\n" +
-    //     "          </tr>";
-    // console.log('j.rows.length: ' , j.rows.length);
-    // for ( let rr  = 1; rr <j.rows.length-1; rr++, ()=>{clearTableCB(1);} ){
-    //     j.deleteRow(rr);
-    //     console.log(rr);
-    // }
 
-
-    setTimeout(()=>{ clearTableCB(1); }, 2000);
-}
-
-
-
-
-
-
+function DeliveredColorSelector(orderStatusID) {
+        let BGColor ='';
+        switch (orderStatusID) {
+            case 10:
+                BGColor = '#ebfced'; break;
+            case 1:
+                BGColor = '#ffffff'; break;
+            case 2:
+                BGColor = '#ceccd0'; break;
+        }
+        return BGColor;
+    }
 
 
     // socket.on("deledeOrderBySystemUser", )

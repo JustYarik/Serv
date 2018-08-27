@@ -323,27 +323,27 @@ io.on('connection', (socket)=> {
     //
     );
 
-    // socket.on('orderDelivered', (orderID)=>{
-    //         // find suser Login in sessions
-    //         let suserLogin = '';
-    //         for(let  u = sessions.length - 1; u >= 0; u--) {
-    //             if(sessions[u][1] === socket.id) {
-    //                 suserLogin = sessions[u][0];
-    //                 dbFunctions.changeOrderStatus(suserLogin, orderID.orderID, 10, (cb)=>{
-    //                     console.log('status of order ' + orderID.orderID + ' was updated up to DELIVERED');
-    //                 } )
-    //             }
-    //         }
-    //         console.log(orderID.orderID, socket.id);
-    //         systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
-    //                 sucupdate.updateCabinet(systUserOrderDate);
-    //                 console.log('F: fuelMain2 --> system user cabinet was updated ');
-    //             }
-    //         );
-    //
-    //     }
-        //
-    // )
+    socket.on('orderDelivered', (orderID)=>{
+            // find suser Login in sessions
+            let suserLogin = '';
+            for(let  u = sessions.length - 1; u >= 0; u--) {
+                if(sessions[u][1] === socket.id) {
+                    suserLogin = sessions[u][0];
+                    dbFunctions.changeOrderStatus(suserLogin, orderID.orderID, 10, (cb)=>{
+                        console.log('status of order ' + orderID.orderID + ' was updated up to DELIVERED');
+                    } )
+                }
+            }
+            console.log(orderID.orderID, socket.id);
+            systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
+                    sucupdate.updateCabinet(systUserOrderDate);
+                    console.log('F: fuelMain2 --> system user cabinet was updated ');
+                }
+            );
+
+        }
+
+    )
 
 });
 
