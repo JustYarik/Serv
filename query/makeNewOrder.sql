@@ -13,7 +13,7 @@ INSERT INTO orders (
                       , orderFuelType
                       , orderPatrolStationType
                       , orderResponsibleID
-                      , orderStatus
+                      , orderStatusID
                    )
   SELECT
     (

@@ -8,7 +8,7 @@ SELECT
   , o.orderFuelType
   , o.orderPatrolStationType
   , o.orderDate
-  , o.orderStatus
+  , o.orderStatusID
 
 FROM orders   AS o
 JOIN sysUsers AS s
@@ -16,5 +16,4 @@ JOIN sysUsers AS s
       AND upper(s.sUserLogin) = upper(@systUserLogin)
 
 JOIN clients c ON o.orderClientID = c.clientID
-ORDER BY o.orderID ASC
-;
+ORDER BY o.orderStatusID ASC, o.orderID DESC

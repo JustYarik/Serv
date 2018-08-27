@@ -216,6 +216,7 @@ function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
             let orderFuelType = [];
             let orderPatrolStationType = [];
             let orderDate = [];
+            let orderStatusID = [];
             for (let h = 0; h < ress[1].length; h++) {
                 // console.log(ress[h].orderID, ress[h].orderQuontity, ress[h].orderFuelType, ress[h].orderPatrolStationType, ress[h].orderDate);
                 clientLogin[h]= ress[1][h].clientLogin;
@@ -224,6 +225,7 @@ function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
                 orderFuelType[h] = ress[1][h].orderFuelType;
                 orderPatrolStationType[h] = PSSelector( ress[1][h].orderPatrolStationType);
                 orderDate[h] = ress[1][h].orderDate.getFullYear()+'-'+ress[1][h].orderDate.getMonth()+'-'+ ress[1][h].orderDate.getDate()+'  '+ress[1][h].orderDate.getHours()+':'+ress[1][h].orderDate.getMinutes();
+                orderStatusID[h] = ress[1][h].orderStatusID;
             }
 
             let obj = {
@@ -236,6 +238,7 @@ function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
                 orderFuelType: orderFuelType,
                 orderPatrolStationType: orderPatrolStationType,
                 orderDate: orderDate,
+                orderStatusID: orderStatusID,
                 pageNumber: pageNumber
             };
 
@@ -272,14 +275,15 @@ io.on('connection', (socket)=> {
         // io.sockets.emit('new_message', data );
         // console.log(data.message.systUserLogin);
         findSocketIDbySULogin((data.message.systUserLogin+'').toUpperCase(), (cb)=>{
-            // console.log(cb);
+            console.log( 'L278 socketIDofLoockedSuser: ', cb);
             console.log(sessions);
             for (let y = 0; y < cb.length; y++){
-                // console.log('line 280');
+                console.log('line 281');
+                // console.log('line 282',  );
                 io.to(sessions[cb[y]][1]).emit('new_message', data);
             }
         });
-        console.log('F: fuelMain2 --> new message ');
+        console.log('F: fuelMain2 L285 --> new message ');
     });
     
     socket.on('disconnect', ()=>{
@@ -306,7 +310,6 @@ io.on('connection', (socket)=> {
                 suserLogin = sessions[i][0];
                 dbFunctions.ordersDeleteBySystemUser(suserLogin, orderID.orderID, (cb)=>{
                     console.log('order ' + orderID.orderID + ' was deleted');
-
                 } )
             }
         }
@@ -316,10 +319,32 @@ io.on('connection', (socket)=> {
                     console.log('F: fuelMain2 --> system user cabinet was updated ');
                 }
             );
-
         }
     //
-    )
+    );
+
+    // socket.on('orderDelivered', (orderID)=>{
+    //         // find suser Login in sessions
+    //         let suserLogin = '';
+    //         for(let  u = sessions.length - 1; u >= 0; u--) {
+    //             if(sessions[u][1] === socket.id) {
+    //                 suserLogin = sessions[u][0];
+    //                 dbFunctions.changeOrderStatus(suserLogin, orderID.orderID, 10, (cb)=>{
+    //                     console.log('status of order ' + orderID.orderID + ' was updated up to DELIVERED');
+    //                 } )
+    //             }
+    //         }
+    //         console.log(orderID.orderID, socket.id);
+    //         systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
+    //                 sucupdate.updateCabinet(systUserOrderDate);
+    //                 console.log('F: fuelMain2 --> system user cabinet was updated ');
+    //             }
+    //         );
+    //
+    //     }
+        //
+    // )
+
 });
 
 function PSSelector(psType) {
@@ -364,22 +389,25 @@ function deleteSessions(socketID, CB_session) {
 
 function findSocketIDbySULogin(susername, CB){
     let socketIDofLoockedSuser = [];
-    console.log(sessions);
+    // console.log('L393 susername', susername);
+    console.log('sessions: ', sessions);
 
-    console.log('L344 sessions.Length:  ' + sessions.length);
+    console.log('F: fuelMain2 --> L344 sessions.Length:  ' + sessions.length);
     for (let t = 0; t < sessions.length; t++) {
         // console.log('L341 '+sessions[t][0].toUpperCase() );
         // console.log('L342 '+susername);
        if (sessions[t][0].toUpperCase() ===  susername){
                 socketIDofLoockedSuser.push(t);
+                // console.log('L402: match find', socketIDofLoockedSuser);
             }
     }
     CB(socketIDofLoockedSuser);
-}
-
-function orderCancelBySystemUser(suserLogin, orderID){
 
 }
+
+// function orderCancelBySystemUser(suserLogin, orderID){
+//
+// }
 
 app.get('/news', function (req, res) {
     var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};

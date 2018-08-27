@@ -48,7 +48,7 @@ exports.makeNewOrder = function (callback, clientEmail ,orderQuantity, orderFuel
                     let z2 = fft.replace('___clientLogin', clientEmail);
                     con.query(z2,(err2, res2)=>{
                         if (err2) throw err2;
-                        console.log('F: DBfunctions --> '+res2[2][0] );
+                        console.log('F: DBfunctions --> ', res2[2][0] );
 
                         let orderData = {
                             systUserLogin: [ res2[2][0].sUserLogin.toUpperCase() ],
@@ -130,6 +130,15 @@ exports.ordersDeleteBySystemUser = function (systUserLogin, orderID, ocbsuCB  ) 
     })
 };
 
+exports.changeOrderStatus = function (systUserLogin, orderID, newOrderStatus, changeOrderStatusCB  ) {
+    getFileText('./query/changeOrderStatus.sql', (ft)=> {
+        let z = ft.replace('___systUserLogin', systUserLogin).replace('___orderID', orderID).replace('___newOrderStatus', newOrderStatus);
+        con.query(z, (err, result) => { if (err) throw err;
+            changeOrderStatusCB(returnData(result));
+        })
+        // console.log(z);
+    })
+};
 
 function PSSelector(psType) {
     let PSName ='';
