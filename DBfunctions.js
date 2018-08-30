@@ -117,7 +117,8 @@ exports.getClientOrdersForSystUser = function (callback, systUserLogin, pageNumb
         let z = ft.replace('___systUserLogin', systUserLogin).replace('___PN', pageNumber);
         con.query(z, (err, result) => { if (err) throw err;
             callback(returnData(result));
-        })
+        });
+        // console.log(z);
     })
 };
 
@@ -140,6 +141,16 @@ exports.changeOrderStatus = function (systUserLogin, orderID, newOrderStatus, ch
     })
 };
 
+exports.updateOrderBySUser = function (systUserLogin, orderID, newQantity, newFuelType, newPSTypeName, updateOrderBySUserCB  ) {
+    getFileText('./query/updateOrderBySystUser.sql', (ft)=> {
+        // console.log(ft);
+        let z = ft.replace('___SULogin', systUserLogin).replace('___orderID', orderID).replace('___newQantity', newQantity).replace('___newFuelType', newFuelType).replace('___newPSTypeName', newPSTypeName);
+        con.query(z, (err, result) => { if (err) throw err;
+            updateOrderBySUserCB(returnData(result));
+        });
+        // console.log(z);
+    })
+};
 function PSSelector(psType) {
     let PSName ='';
     switch (psType) {

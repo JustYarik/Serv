@@ -11,7 +11,7 @@
     <div class="container">
         <h1 class="text-center">System user Cabinet</h1>
         <% include bloks/header.ejs %>
-        <h2 align="center">Welcome  <%= systUserLogin %> </h2>
+        <h2 id="SULogin" align="center">Welcome  <%= systUserLogin %> </h2>
     </div>
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -28,7 +28,7 @@
             function prevPage() { document.getElementById("PN").value= parseInt(document.getElementById("PN").value) - 1; }
         </script>
     </form>
-    <!--<form method="post" action="/orderCancelBySystemUser">-->
+    <!--<form method="get" action="/order" name="OrderForm">-->
         <table class="table table-bordered table-hover" id="SUorderTable">
             <tr>
                 <th>Order ID</th>

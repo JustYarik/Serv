@@ -166,6 +166,14 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
     }
 });
 
+app.get('/order', urlencoderParser, function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    console.log('req.query ', req.query);
+
+
+    // console.log('req.query ',req.query);
+    res.render('order', req.query);
+});
 
 console.log('F: fuelMain2 --> fuelMain2.js');
 console.log('F: fuelMain2 --> server started, listening port 3000');
@@ -210,6 +218,7 @@ function clientCabinetRender(clientEmail, pageNumber, OrderData) {
 
 function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
     dbFunctions.getClientOrdersForSystUser((ress)=>{
+            // console.log('L14 ', ress);
             let clientLogin =[];
             let orderID = [] ;
             let orderorderQuontity =[];
@@ -257,7 +266,6 @@ function systUserCabinetRender(systUserLogin, pageNumber, systUserOrderDate) {
 //     console.log('refreshSUCabinet');
 io.on('connection', (socket)=> {
 
-
     // list of sockets
     io.clients((error, clients) => {
         if (error) throw error;
@@ -297,8 +305,6 @@ io.on('connection', (socket)=> {
 
     socket.on('susername', (data1)=>{
         addSession(data1.username, socket.id );
-        // console.log('USERNAME');
-        // console.log(sessions);
     });
     
     
@@ -320,8 +326,8 @@ io.on('connection', (socket)=> {
                 }
             );
         }
-    //
     );
+  
 
     socket.on('orderDelivered', (orderID)=>{
             // find suser Login in sessions
@@ -334,19 +340,36 @@ io.on('connection', (socket)=> {
                     } )
                 }
             }
-            console.log(orderID.orderID, socket.id);
+            // console.log(orderID.orderID, socket.id);
             systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
                     sucupdate.updateCabinet(systUserOrderDate);
                     console.log('F: fuelMain2 --> system user cabinet was updated ');
                 }
             );
-
+        }
+    );
+    
+    socket.on('update_orders', (CB)=>{
+        // find suser Login in sessions
+        // let suserLogin = username ;
+        // console.log('CB ', CB);
+        if (CB.orderChanged){
+            dbFunctions.updateOrderBySUser(CB.SULogin, CB.OrderID, CB.Quantity,  CB.FuelType, CB.PSType, (updateOrderBySUserCB)=>{
+                console.log('updated');
+                systUserCabinetRender(CB.SULogin, 1, (systUserOrderDate)=>{
+                        // console.log('L12 ', CB.SULogin);
+                        // console.log('L13 ', systUserOrderDate);
+                        sucupdate.updateCabinet(systUserOrderDate);
+                        console.log('F362: fuelMain2 --> system user cabinet was updated ');
+                    }
+                );
+            });
         }
 
-    )
-
+    });
 });
 
+/** @return {string} */
 function PSSelector(psType) {
     let PSName ='';
     switch (psType) {
@@ -364,7 +387,6 @@ function getPSNameFromRequest( request) {
     if (request.psOKKO) {PSName = 'OKKO'; return PSName}
 }
 
-
 function fuelTypeSelector(reqWithFuelType){
     let fuelName ='';
     // console.log(reqWithFuelType);
@@ -377,6 +399,7 @@ function addSession(suserLogin, socketID, addSessionCB ){
     // addSessionCB(sessions);
     console.log(sessions);
 }
+
 function deleteSessions(socketID, CB_session) {
     for(let  i = sessions.length - 1; i >= 0; i--) {
         if(sessions[i][1] === socketID) {
@@ -385,7 +408,6 @@ function deleteSessions(socketID, CB_session) {
         CB_session(sessions);
     }
 }
-
 
 function findSocketIDbySULogin(susername, CB){
     let socketIDofLoockedSuser = [];
@@ -405,9 +427,6 @@ function findSocketIDbySULogin(susername, CB){
 
 }
 
-// function orderCancelBySystemUser(suserLogin, orderID){
-//
-// }
 
 app.get('/news', function (req, res) {
     var obj = { title: "newsTitle", id: 4, paragraphs: ['par-h', 'simple text', ]};
@@ -415,11 +434,7 @@ app.get('/news', function (req, res) {
     res.render('news', {newsID: req.params.id, obj: obj})
 });
 
-// app.get('/order', urlencoderParser, function (req, res) {
-//     if (!req.body) return res.sendStatus(400);
-//     console.log(req.body);
-//     res.render('about', {data: req.body});
-// });
+
 
 // app.post('/about', urlencoderParser, function (req, res) {
 //     if (!req.body) return res.sendStatus(400);

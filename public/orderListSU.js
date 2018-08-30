@@ -28,6 +28,7 @@ $(function () {
             for (let jj=0; jj< data.message.clientLogin.length; jj++ ) {
                 $("#SUorderTable tr:first").after(
                     "<tr id='row'>" +
+                    // "<td> <a href='/order'>"+ data.message.ordersID[jj]                +"</a> </td>" +
                     "<td> <a href='/order'>"+ data.message.ordersID[jj]                +"</a> </td>" +
                     // "<td>"+ data.message.orderStatusID[jj]           +"</td>" +
                     "<td>"+ data.message.clientLogin[jj]             +"</td>" +
@@ -48,7 +49,7 @@ $(function () {
         }
         else {
             if (data) {
-                var txt = "<tbody>"
+                let txt = "<tbody>"
                     + "<tr bgcolor='#ceccd0'>\n" +
                     "                <th>Order ID</th>\n" +
                     // "                <th>order Status</th>\n" +
@@ -60,24 +61,33 @@ $(function () {
                     "                <th>Options</th>\n" +
                     " </tr>";
                 for (let j = 0; j < data.message.clientLogin.length; j++) {
+
                     txt = txt +
                         "<tr id='row"+ data.message.ordersID[j]  +"' " +
-                            "bgcolor='" + DeliveredColorSelector(data.message.orderStatusID[j]) +"'"+
-                            ">" +
-                        "<td> <a href='/order'>" + data.message.ordersID[j] + "</a> </td>" +
-                        // "<td>"+ data.message.orderStatusID[j]           +"</td>" +
-                        "<td>" + data.message.clientLogin[j] + "</td>" +
-                        "<td>" + data.message.orderDate[j] + "</td>" +
-                        "<td>" + data.message.orderorderQuontity[j] + "</td>" +
-                        "<td>" + data.message.orderFuelType[j] + "</td>" +
-                        "<td>" + data.message.orderPatrolStationType[j] + "</td>" +
-                        "<td>" +
-                        "<button type='button' id='bntOrderOperationDelivered'  name='D" + data.message.ordersID[j] + "' >delivered</button>" +
-                        "&nbsp;&nbsp;&nbsp;" +
-                        // "<button type='button' id='bntOrderOperationEdit'       name='E" + data.message.ordersID[j] + "' >edit</button>" +
-                        // "&nbsp;&nbsp;&nbsp;" +
-                        "<button type='button' id='bntOrderOperationCancel'     name='C" + data.message.ordersID[j] + "' >cancel</button>" +
-                        "</td>" +
+                                "bgcolor='" + DeliveredColorSelector(data.message.orderStatusID[j]) +"'>" +
+                            "<td> " +
+                                        "<a href='/order?"
+                                      + "OrderID="   + data.message.ordersID[j]
+                                      + "&SULogin="  + $('#susername').val()
+                                      + "&Quantity=" + data.message.orderorderQuontity[j]
+                                      + "&FuelType=" + data.message.orderFuelType[j]
+                                      + "&PSType="   + data.message.orderPatrolStationType[j]
+                        + "'  target=\'_blank\'>" + data.message.ordersID[j]
+                                      + "</a> " +
+                            "</td>" +
+                            // "<td>"+ data.message.orderStatusID[j]           +"</td>" +
+                            "<td>" + data.message.clientLogin[j] + "</td>" +
+                            "<td>" + data.message.orderDate[j] + "</td>" +
+                            "<td>" + data.message.orderorderQuontity[j] + "</td>" +
+                            "<td>" + data.message.orderFuelType[j] + "</td>" +
+                            "<td>" + data.message.orderPatrolStationType[j] + "</td>" +
+                            "<td>" +
+                            "<button type='button' id='bntOrderOperationDelivered'  name='D" + data.message.ordersID[j] + "' >delivered</button>" +
+                            "&nbsp;&nbsp;&nbsp;" +
+                            // "<button type='button' id='bntOrderOperationEdit'       name='E" + data.message.ordersID[j] + "' >edit</button>" +
+                            // "&nbsp;&nbsp;&nbsp;" +
+                            "<button type='button' id='bntOrderOperationCancel'     name='C" + data.message.ordersID[j] + "' >cancel</button>" +
+                            "</td>" +
                         "</tr>";
                 }
                 if (txt != "") {
@@ -111,24 +121,18 @@ $(function () {
     // });
 
 
-function DeliveredColorSelector(orderStatusID) {
+    /** @return {string} */
+    function DeliveredColorSelector(orderStatusID) {
         let BGColor ='';
         switch (orderStatusID) {
             case 10:
                 BGColor = '#ebfced'; break;
             case 1:
                 BGColor = '#ffffff'; break;
-            case 2:
-                BGColor = '#ceccd0'; break;
+            // case 2:
+            //     BGColor = '#ceccd0'; break;
         }
         return BGColor;
     }
 
-
-    // socket.on("deledeOrderBySystemUser", )
-    // emit typing
-    // message.bind('keypress', ()=>{
-    //     socket.emit('typing')
-    // });
-
-});
+}); // Global function
