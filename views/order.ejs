@@ -3,59 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Order</title>
+    <link rel="stylesheet" href ="/public/stylesheets/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 </head>
 <body>
-
+    <div class="container">
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
     <h1>Order info </h1>
     <% include bloks/header.ejs %>
 
-    <form method="get" action="/order">
-        <p>
-            <label for="name">Order ID&nbsp;</label>
-            <input id="OrderID" name="OrderID" type="text" value="<%= OrderID %>" readonly/>&nbsp;
-        </p>
 
-        <p>
-            <label for="name">Quantity&nbsp;&nbsp;</label>
-            <input id="Quantity" name="Quantity" type="text" value="<%= Quantity %>" />
-        </p>
+        <form method="get" action="/order">
+            <p>
+                <label for="name">Order ID&nbsp;</label>
+                <input id="OrderID" name="OrderID" type="text" style="border: none; font-weight: bold" value="<%= OrderID %>" readonly/>&nbsp;
+            </p>
 
-        <label for="name">Fuel type&nbsp;</label>
-        <select id="FuelType" name="FuelType" onchange="document.getElementById('orderChanged').value = 'orderChanged'">
-            <option selected="selected"
-                    value="95">95</option>
-            <option value="195">DT</option>
-        </select>
+            <p>
+                <label for="name">Quantity&nbsp;&nbsp;</label>
+                <input id="Quantity" name="Quantity" type="text" value="<%= Quantity %>" />
+            </p>
 
-        <label for="name">Patrol Station&nbsp;</label>
-        <select name="PSType" id="PStype" >
-            <option selected="selected"
-                    value="WOG">WOG</option>
-            <option value="OKKO">OKKO</option>
-        </select>
-        <br /> <button id="Submit" type="submit" value="Submit" onclick="document.getElementById('orderChanged').value = 'orderChanged'">Save changes</button>
-        <!--<p></p>-->
-        <!--<br /> <button type="submit" value="Submit">Cancel Order</button>-->
-        <!--</form>-->
-        <select name="orderChanged" id="orderChanged" hidden>
-            <option                     value="orderChanged">changed</option>
-            <option selected="selected" value="NoChanges"   >no</option>
-        </select>
-        <input hidden id="SULogin" name="SULogin" type="text" value="<%= SULogin %>" />
-        <script>
-            if( '<%= PSType %>' === 'WOG'  ){
-                document.getElementById('PStype').value = "WOG";
-            }
-            else{
-                document.getElementById('PStype').value = "OKKO";
-            }
-        </script>
-        <script src="../public/orrderWindowJS.js"></script>
-    </form>
+            <label for="name">Fuel type&nbsp;</label>
+            <select id="FuelType" name="FuelType" onchange="document.getElementById('orderChanged').value = 'orderChanged'">
+                <option selected="selected"
+                        value="95">95</option>
+                <option value="195">DT</option>
+            </select>
+
+            <p>
+            <label for="name">Patrol Station&nbsp;</label>
+            <select name="PSType" id="PStype" >
+                <option selected="selected"
+                        value="WOG">WOG</option>
+                <option value="OKKO">OKKO</option>
+            </select>
+            <p></p>
+            <br />
+                <button id="Submit"    type="submit"     name="sbm"  class="submit" value="Submit" onclick="document.getElementById('orderChanged').value = 'orderChanged'">Save changes</button>
+                &nbsp;&nbsp;&nbsp;
+                <!--<button id="Submit"    type="submit"     name="sbm1" class="submit"  value="Submit1" onclick="document.getElementById('orderChanged').value = 'orderChanged'">Save changes</button>-->
+                <!--&nbsp;&nbsp;&nbsp;-->
+                <button id="btnCloseTab" onclick=" window.close() ">Close Tab</button>
+            </p>
+            <!--<p></p>-->
+            <!--<br /> <button type="submit" value="Submit">Cancel Order</button>-->
+            <!--</form>-->
+            <select name="orderChanged" id="orderChanged" hidden>
+                <option                     value="orderChanged">changed</option>
+                <option selected="selected" value="NoChanges"   >no</option>
+            </select>
+            <input hidden id="SULogin" name="SULogin" type="text" value="<%= SULogin %>" />
+            <script>
+                if( '<%= PSType %>' === 'WOG'  ){
+                    document.getElementById('PStype').value = "WOG";
+                }
+                else{
+                    document.getElementById('PStype').value = "OKKO";
+                }
+            </script>
+            <script src="../public/orrderWindowJS.js"></script>
+        </form>
+    </div>
 </body>
 </html>
 

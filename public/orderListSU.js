@@ -29,7 +29,16 @@ $(function () {
                 $("#SUorderTable tr:first").after(
                     "<tr id='row'>" +
                     // "<td> <a href='/order'>"+ data.message.ordersID[jj]                +"</a> </td>" +
-                    "<td> <a href='/order'>"+ data.message.ordersID[jj]                +"</a> </td>" +
+                    "<td> " +
+                        "<a href='/order?"
+                            + "OrderID="   + data.message.ordersID[jj]
+                            + "&SULogin="  + $('#susername').val()
+                            + "&Quantity=" + data.message.orderorderQuontity[jj]
+                            + "&FuelType=" + data.message.orderFuelType[jj]
+                            + "&PSType="   + data.message.orderPatrolStationType[jj]
+                            + "'  target=\'_blank\'>" + data.message.ordersID[jj]
+                        + "</a> " +
+                    "</td>" +
                     // "<td>"+ data.message.orderStatusID[jj]           +"</td>" +
                     "<td>"+ data.message.clientLogin[jj]             +"</td>" +
                     "<td>"+ data.message.orderDate[jj]               +"</td>" +
@@ -66,14 +75,14 @@ $(function () {
                         "<tr id='row"+ data.message.ordersID[j]  +"' " +
                                 "bgcolor='" + DeliveredColorSelector(data.message.orderStatusID[j]) +"'>" +
                             "<td> " +
-                                        "<a href='/order?"
+                                "<a href='/order?"
                                       + "OrderID="   + data.message.ordersID[j]
                                       + "&SULogin="  + $('#susername').val()
                                       + "&Quantity=" + data.message.orderorderQuontity[j]
                                       + "&FuelType=" + data.message.orderFuelType[j]
                                       + "&PSType="   + data.message.orderPatrolStationType[j]
-                        + "'  target=\'_blank\'>" + data.message.ordersID[j]
-                                      + "</a> " +
+                                      + "'  target=\'_blank\'>" + data.message.ordersID[j]
+                                + "</a> " +
                             "</td>" +
                             // "<td>"+ data.message.orderStatusID[j]           +"</td>" +
                             "<td>" + data.message.clientLogin[j] + "</td>" +

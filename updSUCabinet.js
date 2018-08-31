@@ -9,7 +9,7 @@ let io = require('socket.io-client');
 
     });
 exports.updateCabinet = function (ordersList) {
-    console.log('F: updSUCAbinet --> ');
+    console.log('F: updSUCAbinet --> function updateCabinet');
     // console.log(ordersList);
     socket.emit('new_message', {message: ordersList});
     

@@ -283,15 +283,15 @@ io.on('connection', (socket)=> {
         // io.sockets.emit('new_message', data );
         // console.log(data.message.systUserLogin);
         findSocketIDbySULogin((data.message.systUserLogin+'').toUpperCase(), (cb)=>{
-            console.log( 'L278 socketIDofLoockedSuser: ', cb);
+            // console.log( 'L278 socketIDofLoockedSuser: ', cb);
             console.log(sessions);
             for (let y = 0; y < cb.length; y++){
-                console.log('line 281');
+                // console.log('line 281');
                 // console.log('line 282',  );
                 io.to(sessions[cb[y]][1]).emit('new_message', data);
             }
         });
-        console.log('F: fuelMain2 L285 --> new message ');
+        // console.log('F: fuelMain2 L285 --> new message ');
     });
     
     socket.on('disconnect', ()=>{
@@ -316,15 +316,16 @@ io.on('connection', (socket)=> {
                 suserLogin = sessions[i][0];
                 dbFunctions.ordersDeleteBySystemUser(suserLogin, orderID.orderID, (cb)=>{
                     console.log('order ' + orderID.orderID + ' was deleted');
+                    systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
+                            sucupdate.updateCabinet(systUserOrderDate);
+                            console.log('F: fuelMain2 --> system user cabinet was updated ');
+                        }
+                    );
                 } )
             }
         }
-        console.log(orderID.orderID, socket.id);
-            systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
-                    sucupdate.updateCabinet(systUserOrderDate);
-                    console.log('F: fuelMain2 --> system user cabinet was updated ');
-                }
-            );
+        // console.log(orderID.orderID, socket.id);
+
         }
     );
   
@@ -337,15 +338,16 @@ io.on('connection', (socket)=> {
                     suserLogin = sessions[u][0];
                     dbFunctions.changeOrderStatus(suserLogin, orderID.orderID, 10, (cb)=>{
                         console.log('status of order ' + orderID.orderID + ' was updated up to DELIVERED');
+                        systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
+                                sucupdate.updateCabinet(systUserOrderDate);
+                                console.log('F: fuelMain2 --> system user cabinet was updated ');
+                            }
+                        );
                     } )
                 }
             }
             // console.log(orderID.orderID, socket.id);
-            systUserCabinetRender(suserLogin, 1, (systUserOrderDate)=>{
-                    sucupdate.updateCabinet(systUserOrderDate);
-                    console.log('F: fuelMain2 --> system user cabinet was updated ');
-                }
-            );
+
         }
     );
     

@@ -44,3 +44,26 @@ a {
   height:auto;
   display:inline-block;
 }
+
+/*Order.ejs*/
+#Submit{
+  background:    #9fc5e8;
+  border-radius: 3px;
+  padding:       6px 7px;
+  color:         #000000;
+  display:       inline-block;
+  font:          normal 400 20px/1 "Calibri", sans-serif;
+  text-align:    center;
+  text-shadow:   none;
+}
+
+#btnCloseTab{
+  background:    #f4cccc;
+  border-radius: 3px;
+  padding:       6px 7px;
+  color:         #000000;
+  display:       inline-block;
+  font:          normal 400 20px/1 "Calibri", sans-serif;
+  text-align:    center;
+  text-shadow:   none;
+}
