@@ -151,6 +151,18 @@ exports.updateOrderBySUser = function (systUserLogin, orderID, newQantity, newFu
         // console.log(z);
     })
 };
+
+exports.getSULoginForClientOrder = function (clientLogin, getSULoginForClientOrderCB  ) {
+    getFileText('./query/getSULoginForClientOrder.sql', (ft)=> {
+        // console.log(ft);
+        let z = ft.replace('___clientLogin', clientLogin);
+        con.query(z, (err, result) => { if (err) throw err;
+            getSULoginForClientOrderCB(returnData(result[1]));
+        });
+        // console.log(z);
+    })
+};
+
 function PSSelector(psType) {
     let PSName ='';
     switch (psType) {

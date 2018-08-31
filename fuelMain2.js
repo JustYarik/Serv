@@ -169,10 +169,25 @@ app.post('/CreateUser', urlencoderParser, function (req, result) {
 app.get('/order', urlencoderParser, function (req, res) {
     if (!req.body) return res.sendStatus(400);
     console.log('req.query ', req.query);
-
+    let request = req.query;
+    if (req.query.ClientLogin){
+        console.log('CLIENT');
+        dbFunctions.getSULoginForClientOrder(req.query.ClientLogin, (getSULoginForClientOrderCB)=>{
+            console.log(getSULoginForClientOrderCB[0].suLogin);
+            req.query.SULogin = getSULoginForClientOrderCB[0].suLogin;
+            // request.push({test: getSULoginForClientOrderCB[0].suLogin});
+            console.log('request', request);
+            // res.render('order', request);
+            // res.sendStatus(200);
+            // res.render('order', req.query);
+        })
+    }
+    res.render('order', req.query);
+    // res.sendStatus(200);
 
     // console.log('req.query ',req.query);
-    res.render('order', req.query);
+    // res.render('order', req.query);
+
 });
 
 console.log('F: fuelMain2 --> fuelMain2.js');

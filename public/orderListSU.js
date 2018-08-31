@@ -36,7 +36,8 @@ $(function () {
                             + "&Quantity=" + data.message.orderorderQuontity[jj]
                             + "&FuelType=" + data.message.orderFuelType[jj]
                             + "&PSType="   + data.message.orderPatrolStationType[jj]
-                            + "'  target=\'_blank\'>" + data.message.ordersID[jj]
+                            + "'  target=\'_blank\'>"
+                            + data.message.ordersID[jj]
                         + "</a> " +
                     "</td>" +
                     // "<td>"+ data.message.orderStatusID[jj]           +"</td>" +

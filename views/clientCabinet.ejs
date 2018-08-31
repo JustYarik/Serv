@@ -64,7 +64,13 @@
             </tr>
            <% for(let l=0; l< ordersID.length; l++ ){ %>
                 <tr>
-                    <td><%= ordersID[l] %> </td>
+                    <td>
+                        <a
+                             href='/order?OrderID=<%= ordersID[l] %>&ClientLogin=<%= clientEmail %>&Quantity=<%= orderorderQuontity[l] %>&FuelType=<%= orderFuelType[l] %>&PSType=<%= orderPatrolStationType[l] %>&SULogin='  target=\'_blank\'
+                        >
+                            <%= ordersID[l] %>
+                        </a>
+                    </td>
                     <td><%= orderDate[l] %> </td>
                     <td><%= orderorderQuontity[l] %> </td>
                     <td><%= orderFuelType[l] %> </td>
